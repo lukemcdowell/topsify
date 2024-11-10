@@ -1,3 +1,4 @@
+import { getTopItems } from '@/lib/spotifyApi';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -7,7 +8,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  const items = await getTop('tracks', 'long_term', accessToken);
+  const items = await getTopItems('tracks', 'long_term', accessToken);
 
   return NextResponse.json(items);
 }

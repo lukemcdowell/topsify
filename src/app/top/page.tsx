@@ -8,14 +8,24 @@ export default function TopTracks() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch('/api/top')
-      .then((response) => {
-        if (!response.ok) throw new Error('Failed to fetch top tracks');
-        return response.json();
-      })
-      .then(setTopTracks)
-      .then(() => setLoading(true))
-      .catch(() => setError(true));
+    const fetchTopTracks = async () => {
+      try {
+        const response = await fetch(`/api/top`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setTopTracks(data);
+        } else {
+          setError(true);
+        }
+      } catch (error) {
+        setError(true);
+      }
+
+      setLoading(false);
+    };
+
+    fetchTopTracks();
   }, []);
 
   if (loading) return <p>Loading...</p>;

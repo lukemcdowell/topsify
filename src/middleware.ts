@@ -14,9 +14,6 @@ export async function middleware(request: NextRequest) {
   // if neither exist, redirect to login for authentication
   if (accessToken) {
     console.log('access token found');
-    // TODO: add access token to headers?
-    
-
     return response;
   } else if (refreshToken) {
     console.log('refresh token found');
@@ -24,15 +21,14 @@ export async function middleware(request: NextRequest) {
     // TODO: get new access token from refresh token
     return response;
   } else {
-    // redirect to /login for authentication
-    console.log('redirecting to /login for authentication');
+    console.log(
+      'no access token found, redirecting to /login for authentication'
+    );
 
     return NextResponse.redirect(new URL('/api/login', request.url));
   }
 }
 
-// bypass middleware based on header?
-// https://nextjs.org/docs/app/building-your-application/routing/middleware#matching-paths
 export const config = {
   matcher: ['/top'],
 };

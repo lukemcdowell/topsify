@@ -30,16 +30,18 @@ function generateRandomString(length: number): string {
 }
 
 // creates the URL for redirecting to Spotify's authorization page
-export function createAuthURL(): string {
+export function createAuthURL(): string[] {
+  const state = generateRandomString(16);
+
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
     redirect_uri: REDIRECT_URI,
     response_type: 'code',
-    state: generateRandomString(16),
+    state,
     scope: 'user-top-read',
   });
 
-  return `https://accounts.spotify.com/authorize?${params.toString()}`;
+  return [`https://accounts.spotify.com/authorize?${params.toString()}`, state];
 }
 
 // requests the initial access and refresh tokens
