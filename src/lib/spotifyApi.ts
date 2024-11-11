@@ -5,16 +5,7 @@ import {
   TimeRangeType,
   TopItemsType,
 } from './types';
-
-function getEnvVariable(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(
-      `Environment variable ${name} is required but was not provided.`
-    );
-  }
-  return value;
-}
+import { getEnvVariable } from './utils';
 
 const REDIRECT_URI = getEnvVariable('SPOTIFY_REDIRECT_URI');
 const CLIENT_ID = getEnvVariable('SPOTIFY_CLIENT_ID');

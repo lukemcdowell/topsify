@@ -15,3 +15,28 @@ export interface AccessTokenResponse {
   token_type: string;
   scope: string;
 }
+
+export interface TrackData {
+  name: string;
+  album: {
+    images: { url: string; height: number; width: number }[];
+    name: string;
+    external_urls: {
+      spotify: string;
+    };
+    artists: {
+      name: string;
+      href: string;
+      id: string;
+      uri: string;
+    }[];
+  };
+  artists: {
+    name: string;
+    href: string;
+    id: string;
+    uri: string;
+  }[];
+  uri: string;
+  href: string;
+}

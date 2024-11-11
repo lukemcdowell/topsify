@@ -1,5 +1,6 @@
 'use client';
 
+import TopTrack from '@/components/TopTrack';
 import { useEffect, useState } from 'react';
 
 export default function TopTracks() {
@@ -32,15 +33,18 @@ export default function TopTracks() {
   if (error) return <p>Error loading top tracks</p>;
 
   return (
-    <div>
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl p-10">
+    <div className="container flex flex-col justify-center items-center">
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl p-5">
         Your Top Tracks
       </h1>
-      <ul>
-        {topTracks.map((track: any, index) => (
-          <li key={index}>{track.name}</li>
+      <div
+        id="top-tracks"
+        className="grid gap-1 md:gap-2 grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 p-2 mb-24"
+      >
+        {topTracks.map((trackData: any, index) => (
+          <TopTrack key={index} trackData={trackData} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
