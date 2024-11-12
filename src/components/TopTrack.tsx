@@ -1,8 +1,8 @@
-import { TrackData } from '@/lib/types';
+import { TopTrackType } from '@/lib/types';
 import { Card } from './ui/card';
 
 interface TopTrackProps {
-  trackData: TrackData;
+  trackData: TopTrackType;
 }
 
 function TopTrack({ trackData }: TopTrackProps) {

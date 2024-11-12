@@ -1,12 +1,5 @@
-export type TopItemsType = 'tracks' | 'artists';
+export type TopItemType = 'tracks' | 'artists';
 export type TimeRangeType = 'long_term' | 'medium_term' | 'short_term';
-
-// TODO: add other attributes that will be used
-// TODO: different type for Track v Artist?
-export interface SpotifyItem {
-  id: string;
-  name: string;
-}
 
 export interface AccessTokenResponse {
   access_token: string;
@@ -16,7 +9,7 @@ export interface AccessTokenResponse {
   scope: string;
 }
 
-export interface TrackData {
+export interface TopTrackType {
   name: string;
   album: {
     images: { url: string; height: number; width: number }[];
@@ -40,3 +33,16 @@ export interface TrackData {
   uri: string;
   href: string;
 }
+
+export type TopArtistType = {
+  external_urls: {
+    spotify: string;
+  };
+  genres: string[];
+  images: {
+    height: number;
+    url: string;
+    width: number;
+  }[];
+  name: string;
+};

@@ -1,9 +1,10 @@
 import { Buffer } from 'buffer';
 import {
   AccessTokenResponse,
-  SpotifyItem,
   TimeRangeType,
-  TopItemsType,
+  TopArtistType,
+  TopItemType,
+  TopTrackType,
 } from './types';
 import { getEnvVariable } from './utils';
 
@@ -108,21 +109,19 @@ export async function requestRefreshedAccessToken(
 }
 
 // get top items from spotify API
-// TODO: make different func for topTracks v topArtists
-// make the api call into a separate func, use in both topTracks and topArtists
-export async function getTopItems(
-  topItems: TopItemsType,
-  time_range: TimeRangeType,
-  access_token: string
-): Promise<SpotifyItem[]> {
-  const url = `https://api.spotify.com/v1/me/top/${topItems}`;
+async function fetchTopItems<T>(
+  itemType: TopItemType,
+  timeRange: TimeRangeType,
+  accessToken: string
+): Promise<T[]> {
+  const url = `https://api.spotify.com/v1/me/top/${itemType}`;
   const params = new URLSearchParams({
-    time_range,
+    time_range: timeRange,
     limit: '50',
   });
 
   const headers = {
-    Authorization: `Bearer ${access_token}`,
+    Authorization: `Bearer ${accessToken}`,
   };
 
   try {
@@ -132,13 +131,27 @@ export async function getTopItems(
     });
 
     if (!response.ok) {
-      throw new Error(`Error getting top ${topItems}: ${response.statusText}`);
+      throw new Error(`Error getting top ${itemType}: ${response.statusText}`);
     }
 
     const data = await response.json();
-    return data.items as SpotifyItem[];
+    return data.items as T[];
   } catch (error) {
-    console.error(`Error getting top ${topItems}:`, error);
+    console.error(`Error getting top ${itemType}:`, error);
     throw error;
   }
+}
+
+export async function getTopTracks(
+  timeRange: TimeRangeType,
+  accessToken: string
+): Promise<TopTrackType[]> {
+  return fetchTopItems<TopTrackType>('tracks', timeRange, accessToken);
+}
+
+export async function getTopArtists(
+  timeRange: TimeRangeType,
+  accessToken: string
+): Promise<TopArtistType[]> {
+  return fetchTopItems<TopArtistType>('artists', timeRange, accessToken);
 }
