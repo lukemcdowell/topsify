@@ -1,7 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import Top5Card from '@/components/Top5Card';
 import { useState } from 'react';
 
 export default function TopTracks() {
@@ -35,13 +34,9 @@ export default function TopTracks() {
   if (error) return <p>Error loading top items</p>;
 
   return (
-    <div className="flex flex-col justify-center items-center gap-2">
-      <Button asChild>
-        <Link href="/tracks">View all top tracks</Link>
-      </Button>
-      <Button asChild>
-        <Link href="/artists">View all top artists</Link>
-      </Button>
+    <div className="grid gap-5 grid-cols-1 md:grid-cols-2 py-5">
+      <Top5Card itemType="tracks" />
+      <Top5Card itemType="artists" />
     </div>
   );
 }

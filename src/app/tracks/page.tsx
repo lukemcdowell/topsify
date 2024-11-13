@@ -1,6 +1,7 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
+import Top50Grid from '@/components/Top50Grid';
 import TopTrack from '@/components/TopTrack';
 import { Button } from '@/components/ui/button';
 import { TimeRangeType, TopTrackType } from '@/lib/types';
@@ -53,14 +54,11 @@ export default function TopTracks() {
         setTimeRange={setTimeRange}
       />
 
-      <div
-        id="top-tracks"
-        className="grid gap-1 md:gap-2 grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 p-2 mb-24"
-      >
+      <Top50Grid>
         {topTracks.map((trackData: TopTrackType, index) => (
           <TopTrack key={index} trackData={trackData} />
         ))}
-      </div>
+      </Top50Grid>
     </div>
   );
 }

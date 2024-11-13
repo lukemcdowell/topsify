@@ -1,6 +1,7 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
+import Top50Grid from '@/components/Top50Grid';
 import TopArtist from '@/components/TopArtist';
 import { Button } from '@/components/ui/button';
 import { TimeRangeType, TopArtistType } from '@/lib/types';
@@ -48,14 +49,11 @@ export default function TopTracks() {
         setTimeRange={setTimeRange}
       />
 
-      <div
-        id="top-artists"
-        className="grid gap-1 md:gap-2 grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 p-2 mb-24"
-      >
+      <Top50Grid>
         {topArtists.map((artistData: TopArtistType, index) => (
           <TopArtist key={index} artistData={artistData} />
         ))}
-      </div>
+      </Top50Grid>
     </div>
   );
 }
