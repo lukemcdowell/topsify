@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   try {
     const [accessToken, refreshToken] = await requestAccessToken(code);
 
-    const response = NextResponse.redirect(new URL('/top', request.url));
+    const response = NextResponse.redirect(new URL('/', request.url));
     response.cookies.delete('state');
     response.cookies.set('access_token', accessToken, {
       httpOnly: true,

@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     storedRefreshToken
   );
 
-  const response = NextResponse.redirect(new URL('/top', request.url));
+  const response = NextResponse.redirect(new URL('/', request.url));
   response.cookies.set('access_token', accessToken, {
     httpOnly: true,
     secure: true,

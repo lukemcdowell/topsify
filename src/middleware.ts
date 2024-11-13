@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
   console.log('middleware. from: ', request.url);
   console.log('access_token: ', accessToken);
 
-  // check for access token in cookies, if there is one, redirect to /top
+  // check for access token in cookies, if there is one, continue
   // if none, check for refresh token in cookies, then refresh access token
   // if neither exist, redirect to login for authentication
   if (accessToken) {
@@ -19,14 +19,13 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.redirect(new URL('/api/refresh', request.url));
   } else {
-    console.log(
-      'no access or refresh token found, redirecting to /login for authentication'
-    );
+    console.log('no access or refresh token found, redirecting to /continue');
 
-    return NextResponse.redirect(new URL('/api/login', request.url));
+    return NextResponse.redirect(new URL('/continue', request.url));
   }
 }
 
+// TODO: match all routes?
 export const config = {
-  matcher: ['/top'],
+  matcher: ['/'],
 };

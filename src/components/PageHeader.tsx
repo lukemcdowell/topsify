@@ -29,10 +29,10 @@ export default function PageHeader({
   };
 
   return (
-    <div className="container flex justify-between items-center gap-2 py-4 px-2">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+    <div className="w-full flex justify-between items-center gap-2 p-2">
+      <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
         {title}
-      </h1>
+      </h2>
       <div className="flex gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

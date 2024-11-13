@@ -1,10 +1,8 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
-import TopTrack from '@/components/TopTrack';
 import { Button } from '@/components/ui/button';
-import { TimeRangeType, TopTrackType } from '@/lib/types';
-import Link from 'next/link';
+import { TimeRangeType } from '@/lib/types';
 import { useEffect, useState } from 'react';
 
 export default function TopTracks() {
@@ -13,12 +11,8 @@ export default function TopTracks() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const pageTitle = 'Your Top Tracks';
-  const playlistButton = () => (
-    <Button asChild>
-      <Link href="/top">Create playlist</Link>
-    </Button>
-  );
+  const pageTitle = 'Your recently played tracks';
+  const playlistButton = () => <Button>Create playlist</Button>;
 
   useEffect(() => {
     const fetchTopTracks = async () => {
@@ -42,10 +36,10 @@ export default function TopTracks() {
   }, []);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading top tracks</p>;
+  if (error) return <p>Error loading recently played tracks</p>;
 
   return (
-    <div className="container flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       <PageHeader
         title={pageTitle}
         playlistButton={playlistButton()}
@@ -54,12 +48,12 @@ export default function TopTracks() {
       />
 
       <div
-        id="top-tracks"
+        id="recently-played"
         className="grid gap-1 md:gap-2 grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 p-2 mb-24"
       >
-        {topTracks.map((trackData: TopTrackType, index) => (
+        {/* {topTracks.map((trackData: TopTrackType, index) => (
           <TopTrack key={index} trackData={trackData} />
-        ))}
+        ))} */}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const type = request.nextUrl.searchParams.get('type');
 
   if (!accessToken) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL('/api/login', request.url));
   }
 
   if (type !== 'tracks' && type !== 'artists') {

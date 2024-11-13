@@ -1,3 +1,5 @@
+import Navigation from '@/components/Navigation';
+import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -14,8 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={inter.className}>
+    <html lang="en" className="dark flex justify-center">
+      <body className={cn(inter.className, 'container')}>
+        <Navigation />
+
         <main className="max-w-max min-h-screen m-auto">{children}</main>
       </body>
     </html>
