@@ -43,7 +43,7 @@ export default function TopTracks() {
   if (error) return <p>Error loading top items</p>;
 
   return (
-    <div className="grid gap-24 grid-cols-1 md:grid-cols-2 py-5">
+    <div className="grid gap-24 grid-cols-1 md:grid-cols-2 pt-16 pb-5">
       <Top5Card itemType="tracks" itemData={topTracks} />
       <Top5Card itemType="artists" itemData={topArtists} />
     </div>

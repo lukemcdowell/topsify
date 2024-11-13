@@ -10,13 +10,7 @@ import Link from 'next/link';
 
 function Navigation() {
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-5 pt-5">
-      <Link href="/">
-        <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
-          Tops<span className="text-primary">ify</span>
-        </h1>
-      </Link>
-
+    <div className="w-full flex flex-col justify-center items-center gap-5 pt-2">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>

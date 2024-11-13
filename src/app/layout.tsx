@@ -1,7 +1,7 @@
-import Navigation from '@/components/Navigation';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import Link from 'next/link';
 import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,7 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark flex justify-center">
       <body className={cn(inter.className, 'container')}>
-        <Navigation />
+        <div className="w-full flex justify-center pt-5">
+          <Link href="/">
+            <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
+              Tops<span className="text-primary">ify</span>
+            </h1>
+          </Link>
+        </div>
 
         <main className="max-w-max min-h-screen m-auto">{children}</main>
       </body>
