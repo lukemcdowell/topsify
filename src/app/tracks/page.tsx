@@ -24,7 +24,7 @@ export default function TopTracks() {
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
-        const response = await fetch(`/api/top?type=tracks`);
+        const response = await fetch(`/api/top?type=tracks&limit=50`);
         const data = await response.json();
 
         if (response.ok) {

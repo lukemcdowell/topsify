@@ -19,7 +19,7 @@ export default function TopTracks() {
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
-        const response = await fetch(`/api/top?type=artists`);
+        const response = await fetch(`/api/top?type=artists&limit=50`);
         const data = await response.json();
 
         if (response.ok) {

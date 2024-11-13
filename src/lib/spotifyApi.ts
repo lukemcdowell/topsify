@@ -112,12 +112,13 @@ export async function requestRefreshedAccessToken(
 async function fetchTopItems<T>(
   itemType: TopItemType,
   timeRange: TimeRangeType,
+  limit: number,
   accessToken: string
 ): Promise<T[]> {
   const url = `https://api.spotify.com/v1/me/top/${itemType}`;
   const params = new URLSearchParams({
     time_range: timeRange,
-    limit: '50',
+    limit: String(limit),
   });
 
   const headers = {
@@ -144,14 +145,16 @@ async function fetchTopItems<T>(
 
 export async function getTopTracks(
   timeRange: TimeRangeType,
+  limit: number,
   accessToken: string
 ): Promise<TopTrackType[]> {
-  return fetchTopItems<TopTrackType>('tracks', timeRange, accessToken);
+  return fetchTopItems<TopTrackType>('tracks', timeRange, limit, accessToken);
 }
 
 export async function getTopArtists(
   timeRange: TimeRangeType,
+  limit: number,
   accessToken: string
 ): Promise<TopArtistType[]> {
-  return fetchTopItems<TopArtistType>('artists', timeRange, accessToken);
+  return fetchTopItems<TopArtistType>('artists', timeRange, limit, accessToken);
 }

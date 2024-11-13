@@ -1,19 +1,23 @@
+import { TopArtistType, TopTrackType } from '@/lib/types';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import TopArtist from './TopArtist';
+import TopTrack from './TopTrack';
 import { Button } from './ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from './ui/card';
 
 interface Top5CardProps {
   itemType: 'tracks' | 'artists';
+  itemData: TopTrackType[] | TopArtistType[];
 }
 
-function Top5Card({ itemType }: Top5CardProps) {
+function Top5Card({ itemType, itemData }: Top5CardProps) {
   const itemTypeMapping = {
     tracks: {
       title: 'Tracks',
@@ -31,17 +35,27 @@ function Top5Card({ itemType }: Top5CardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{cardText.title}</CardTitle>
-        <CardDescription>{cardText.description}</CardDescription>
+        <div className="flex gap-2 justify-between">
+          <div>
+            <CardTitle className="pb-2">{cardText.title}</CardTitle>
+            <CardDescription>{cardText.description}</CardDescription>
+          </div>
+          <Button asChild>
+            <Link href={itemType}>
+              View all <ChevronRight />
+            </Link>
+          </Button>
+        </div>
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
+      <CardContent className="flex flex-col gap-2">
+        {itemData.map((item, index) =>
+          itemType === 'tracks' ? (
+            <TopTrack key={index} trackData={item as TopTrackType} />
+          ) : (
+            <TopArtist key={index} artistData={item as TopArtistType} />
+          )
+        )}
       </CardContent>
-      <CardFooter>
-        <Button className="w-full" asChild>
-          <Link href="/tracks">{cardText.buttonText}</Link>
-        </Button>
-      </CardFooter>
     </Card>
   );
 }
