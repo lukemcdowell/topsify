@@ -26,7 +26,7 @@ export default function RootLayout({
           </Link>
         </div>
 
-        <main className="max-w-max min-h-screen m-auto">{children}</main>
+        <main className="container w-full min-h-screen m-auto">{children}</main>
       </body>
     </html>
   );

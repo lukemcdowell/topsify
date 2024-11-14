@@ -3,6 +3,7 @@
 import PageHeader from '@/components/PageHeader';
 import Top50Grid from '@/components/Top50Grid';
 import TopTrack from '@/components/TopTrack';
+import TopTrackSkeleton from '@/components/TopTrackSkeleton';
 import { TimeRangeType, TopTrackType } from '@/lib/types';
 import { useEffect, useState } from 'react';
 
@@ -10,7 +11,7 @@ export default function TopTracks() {
   const [topTracks, setTopTracks] = useState([]);
   const [timeRange, setTimeRange] = useState<TimeRangeType>('long_term');
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTopTracks = async () => {
@@ -33,7 +34,6 @@ export default function TopTracks() {
     fetchTopTracks();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading top tracks</p>;
 
   return (
@@ -45,9 +45,13 @@ export default function TopTracks() {
       />
 
       <Top50Grid>
-        {topTracks.map((trackData: TopTrackType, index) => (
-          <TopTrack key={index} trackData={trackData} />
-        ))}
+        {loading
+          ? Array.from({ length: 50 }).map((_, index) => (
+              <TopTrackSkeleton key={index} />
+            ))
+          : topTracks.map((trackData: TopTrackType, index) => (
+              <TopTrack key={index} trackData={trackData} />
+            ))}
       </Top50Grid>
     </div>
   );
