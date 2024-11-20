@@ -7,7 +7,7 @@ interface TopArtistProps {
 
 function TopArtist({ artistData }: TopArtistProps) {
   return (
-    <Card className="flex items-center gap-3 p-2 w-full max-w-sm border hover:bg-zinc-900 hover:border-primary cursor-pointer">
+    <Card className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer">
       {/* TODO: look at best way to display non-square images */}
       <img
         alt={artistData.name}

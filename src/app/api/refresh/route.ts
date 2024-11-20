@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   response.cookies.set('access_token', accessToken, {
     httpOnly: true,
     secure: true,
-    maxAge: 3600 * 1000,
+    maxAge: 3600,
   });
   response.cookies.set('refresh_token', refreshToken, {
     httpOnly: true,

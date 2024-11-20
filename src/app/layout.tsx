@@ -20,13 +20,13 @@ export default function RootLayout({
       <body className={cn(inter.className, 'container')}>
         <div className="w-full flex justify-center pt-5">
           <Link href="/">
-            <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight lg:text-5xl">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
               Tops<span className="text-primary">ify</span>
             </h1>
           </Link>
         </div>
 
-        <main className="container w-full min-h-screen m-auto">{children}</main>
+        <main className="container w-full h-full m-auto">{children}</main>
       </body>
     </html>
   );

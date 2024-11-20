@@ -1,8 +1,5 @@
-import { TopArtistType, TopTrackType } from '@/lib/types';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import TopArtist from './TopArtist';
-import TopTrack from './TopTrack';
 import { Button } from './ui/button';
 import {
   Card,
@@ -14,10 +11,10 @@ import {
 
 interface Top5CardProps {
   itemType: 'tracks' | 'artists';
-  itemData: TopTrackType[] | TopArtistType[];
+  children: React.ReactNode;
 }
 
-function Top5Card({ itemType, itemData }: Top5CardProps) {
+function Top5Card({ itemType, children }: Top5CardProps) {
   const itemTypeMapping = {
     tracks: {
       title: 'Tracks',
@@ -47,15 +44,7 @@ function Top5Card({ itemType, itemData }: Top5CardProps) {
           </Button>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        {itemData.map((item, index) =>
-          itemType === 'tracks' ? (
-            <TopTrack key={index} trackData={item as TopTrackType} />
-          ) : (
-            <TopArtist key={index} artistData={item as TopArtistType} />
-          )
-        )}
-      </CardContent>
+      <CardContent className="flex flex-col gap-2">{children}</CardContent>
     </Card>
   );
 }

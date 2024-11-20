@@ -7,7 +7,7 @@ interface TopTrackProps {
 
 function TopTrack({ trackData }: TopTrackProps) {
   return (
-    <Card className="flex items-center gap-3 p-2 w-full max-w-sm border hover:bg-zinc-900 hover:border-primary cursor-pointer">
+    <Card className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer">
       <img
         alt={`${trackData.name} by ${trackData.artists[0].name}`}
         className="h-16 w-16 rounded"
