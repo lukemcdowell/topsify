@@ -27,11 +27,17 @@ export interface TopTrackType {
   artists: {
     name: string;
     href: string;
+    external_urls: {
+      spotify: string;
+    };
     id: string;
     uri: string;
   }[];
   uri: string;
   href: string;
+  external_urls: {
+    spotify: string;
+  };
 }
 
 export type TopArtistType = {

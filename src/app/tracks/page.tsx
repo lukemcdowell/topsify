@@ -50,7 +50,7 @@ export default function TopTracks() {
               <TopTrackSkeleton key={index} />
             ))
           : topTracks.map((trackData: TopTrackType, index) => (
-              <TopTrack key={index} trackData={trackData} />
+              <TopTrack key={index} index={index} trackData={trackData} />
             ))}
       </Top50Grid>
     </div>
