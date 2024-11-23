@@ -17,7 +17,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
   const albumLink = trackData.album.external_urls.spotify;
 
   const renderArtistLinks = () => (
-    <div className="flex gap-1">
+    <div className="flex gap-1 ml-12">
       {trackData.artists.map((artist, index) => (
         <Link
           href={artist.external_urls.spotify}
@@ -58,20 +58,10 @@ function TopTrack({ index, trackData }: TopTrackProps) {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[425px] text-white">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold mb-4">
-              <span className="text-2xl text-primary">#{index + 1}</span>
-            </DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col items-center gap-4">
-            <Link href={albumLink} target="_blank">
-              <img
-                alt={`${trackData.name} by ${trackData.artists[0].name}`}
-                className="h-32 w-32 rounded"
-                src={trackData.album.images[0]?.url}
-              />
-            </Link>
-            {/* TODO: fix long track names overflowing */}
-            <div className="flex flex-col">
+            <DialogTitle className="text-2xl font-bold mb-1">
+              <span className="text-2xl text-primary pr-3">#{index + 1}:</span>
+
+              {/* TODO: fix long track names overflowing */}
               <Link
                 href={trackLink}
                 className="text-2xl font-semibold hover:underline truncate"
@@ -80,7 +70,16 @@ function TopTrack({ index, trackData }: TopTrackProps) {
                 {trackData.name}
               </Link>
               {renderArtistLinks()}
-            </div>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center gap-4">
+            <Link href={albumLink} target="_blank">
+              <img
+                alt={`${trackData.name} by ${trackData.artists[0].name}`}
+                className="h-64 w-64 rounded mb-4"
+                src={trackData.album.images[0]?.url}
+              />
+            </Link>
           </div>
         </DialogContent>
       </Dialog>

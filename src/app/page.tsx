@@ -63,7 +63,7 @@ export default function TopTracks() {
                 <TopArtistSkeleton key={index} />
               ))
             : topArtists.map((artistData: TopArtistType, index) => (
-                <TopArtist key={index} artistData={artistData} />
+                <TopArtist key={index} index={index} artistData={artistData} />
               ))}
         </Top5Card>
       </div>
