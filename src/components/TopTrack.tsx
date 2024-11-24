@@ -20,6 +20,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
     <div className="flex gap-1 ml-12">
       {trackData.artists.map((artist, index) => (
         <Link
+          key={index}
           href={artist.external_urls.spotify}
           className="text-lg text-zinc-300 hover:underline truncate"
           target="_blank"

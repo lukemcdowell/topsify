@@ -16,7 +16,9 @@ export default function TopTracks() {
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
-        const response = await fetch(`/api/top?type=tracks&limit=50`);
+        const response = await fetch(
+          `/api/top?type=tracks&limit=50&timeRange=${timeRange}`
+        );
         const data = await response.json();
 
         if (response.ok) {
@@ -32,7 +34,7 @@ export default function TopTracks() {
     };
 
     fetchTopTracks();
-  }, []);
+  }, [timeRange]);
 
   if (error) return <p>Error loading top tracks</p>;
 

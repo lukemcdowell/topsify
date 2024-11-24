@@ -18,8 +18,8 @@ export default function TopTracks() {
     const fetchTopData = async () => {
       try {
         const [tracksResponse, artistsResponse] = await Promise.all([
-          fetch(`/api/top?type=tracks&limit=5`),
-          fetch(`/api/top?type=artists&limit=5`),
+          fetch(`/api/top?type=tracks&limit=5&timeRange=long_term`),
+          fetch(`/api/top?type=artists&limit=5&timeRange=long_term`),
         ]);
 
         const [tracksData, artistsData] = await Promise.all([
