@@ -21,12 +21,12 @@ export async function GET(request: NextRequest) {
     response.cookies.delete('state');
     response.cookies.set('access_token', accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 3600,
     });
     response.cookies.set('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
     });
 
     return response;
