@@ -8,13 +8,22 @@ import { TimeRangeType, TopArtistType } from '@/lib/types';
 import { useEffect, useState } from 'react';
 
 export default function TopTracks() {
-  const [topArtists, setTopArtists] = useState([]);
-  const [timeRange, setTimeRange] = useState<TimeRangeType>('long_term');
+  const [topLongTermArtists, setTopLongTermArtists] = useState([]);
+  const [topMediumTermArtists, setTopMediumTermArtists] = useState([]);
+  const [topShortTermArtists, setTopShortTermArtists] = useState([]);
+  const [selectedTimeRange, setSelectedTimeRange] =
+    useState<TimeRangeType>('long_term');
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const topArtists = {
+    long_term: topLongTermArtists,
+    medium_term: topMediumTermArtists,
+    short_term: topShortTermArtists,
+  };
+
   useEffect(() => {
-    const fetchTopTracks = async () => {
+    const fetchTopArtists = async (timeRange: string) => {
       try {
         const response = await fetch(
           `/api/top?type=artists&limit=50&timeRange=${timeRange}`
@@ -22,19 +31,31 @@ export default function TopTracks() {
         const data = await response.json();
 
         if (response.ok) {
-          setTopArtists(data);
+          switch (timeRange) {
+            case 'long_term':
+              setTopLongTermArtists(data);
+              break;
+            case 'medium_term':
+              setTopMediumTermArtists(data);
+              break;
+            case 'short_term':
+              setTopShortTermArtists(data);
+              break;
+          }
         } else {
           setError(true);
         }
       } catch (error) {
         setError(true);
       }
-
-      setLoading(false);
     };
 
-    fetchTopTracks();
-  }, [timeRange]);
+    fetchTopArtists('long_term');
+    setLoading(false);
+
+    fetchTopArtists('medium_term');
+    fetchTopArtists('short_term');
+  }, []);
 
   if (error) return <p>Error loading top artists</p>;
 
@@ -42,8 +63,8 @@ export default function TopTracks() {
     <div className="flex flex-col justify-center items-center">
       <PageHeader
         title="Your top artists"
-        timeRange={timeRange}
-        setTimeRange={setTimeRange}
+        timeRange={selectedTimeRange}
+        setTimeRange={setSelectedTimeRange}
       />
 
       <Top50Grid>
@@ -51,9 +72,11 @@ export default function TopTracks() {
           ? Array.from({ length: 50 }).map((_, index) => (
               <TopArtistSkeleton key={index} />
             ))
-          : topArtists.map((artistData: TopArtistType, index) => (
-              <TopArtist key={index} index={index} artistData={artistData} />
-            ))}
+          : topArtists[selectedTimeRange].map(
+              (artistData: TopArtistType, index) => (
+                <TopArtist key={index} index={index} artistData={artistData} />
+              )
+            )}
       </Top50Grid>
     </div>
   );

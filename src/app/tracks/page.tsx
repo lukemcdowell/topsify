@@ -8,13 +8,22 @@ import { TimeRangeType, TopTrackType } from '@/lib/types';
 import { useEffect, useState } from 'react';
 
 export default function TopTracks() {
-  const [topTracks, setTopTracks] = useState([]);
-  const [timeRange, setTimeRange] = useState<TimeRangeType>('long_term');
+  const [topLongTermTracks, setTopLongTermTracks] = useState([]);
+  const [topMediumTermTracks, setTopMediumTermTracks] = useState([]);
+  const [topShortTermTracks, setTopShortTermTracks] = useState([]);
+  const [selectedTimeRange, setSelectedTimeRange] =
+    useState<TimeRangeType>('long_term');
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const topTracks = {
+    long_term: topLongTermTracks,
+    medium_term: topMediumTermTracks,
+    short_term: topShortTermTracks,
+  };
+
   useEffect(() => {
-    const fetchTopTracks = async () => {
+    const fetchTopTracks = async (timeRange: string) => {
       try {
         const response = await fetch(
           `/api/top?type=tracks&limit=50&timeRange=${timeRange}`
@@ -22,19 +31,31 @@ export default function TopTracks() {
         const data = await response.json();
 
         if (response.ok) {
-          setTopTracks(data);
+          switch (timeRange) {
+            case 'long_term':
+              setTopLongTermTracks(data);
+              break;
+            case 'medium_term':
+              setTopMediumTermTracks(data);
+              break;
+            case 'short_term':
+              setTopShortTermTracks(data);
+              break;
+          }
         } else {
           setError(true);
         }
       } catch (error) {
         setError(true);
       }
-
-      setLoading(false);
     };
 
-    fetchTopTracks();
-  }, [timeRange]);
+    fetchTopTracks('long_term');
+    setLoading(false);
+
+    fetchTopTracks('medium_term');
+    fetchTopTracks('short_term');
+  }, []);
 
   if (error) return <p>Error loading top tracks</p>;
 
@@ -42,8 +63,8 @@ export default function TopTracks() {
     <div className="flex flex-col justify-center items-center">
       <PageHeader
         title="Your top tracks"
-        timeRange={timeRange}
-        setTimeRange={setTimeRange}
+        timeRange={selectedTimeRange}
+        setTimeRange={setSelectedTimeRange}
       />
 
       <Top50Grid>
@@ -51,9 +72,11 @@ export default function TopTracks() {
           ? Array.from({ length: 50 }).map((_, index) => (
               <TopTrackSkeleton key={index} />
             ))
-          : topTracks.map((trackData: TopTrackType, index) => (
-              <TopTrack key={index} index={index} trackData={trackData} />
-            ))}
+          : topTracks[selectedTimeRange].map(
+              (trackData: TopTrackType, index) => (
+                <TopTrack key={index} index={index} trackData={trackData} />
+              )
+            )}
       </Top50Grid>
     </div>
   );
