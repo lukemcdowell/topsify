@@ -1,4 +1,5 @@
 import { TopTrackType } from '@/lib/types';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Card } from './ui/card';
@@ -43,10 +44,14 @@ function TopTrack({ index, trackData }: TopTrackProps) {
         className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer"
         onClick={handleDialogOpen}
       >
-        <img
+        <Image
           alt={`${trackData.name} by ${artistList}`}
           className="h-16 w-16 rounded"
           src={trackData.album.images[0]?.url}
+          width={trackData.album.images[0]?.width}
+          height={trackData.album.images[0]?.height}
+          placeholder="blur"
+          blurDataURL={trackData.album.images[2]?.url}
         />
         <div className="min-w-0 flex-1">
           <p className="text-md font-medium leading-none text-white truncate">
@@ -75,10 +80,14 @@ function TopTrack({ index, trackData }: TopTrackProps) {
           </DialogHeader>
           <div className="flex flex-col items-center gap-4">
             <Link href={albumLink} target="_blank">
-              <img
+              <Image
                 alt={`${trackData.name} by ${trackData.artists[0].name}`}
                 className="h-64 w-64 rounded mb-4"
                 src={trackData.album.images[0]?.url}
+                width={trackData.album.images[0]?.width}
+                height={trackData.album.images[0]?.height}
+                placeholder="blur"
+                blurDataURL={trackData.album.images[2]?.url}
               />
             </Link>
           </div>

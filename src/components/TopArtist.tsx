@@ -1,4 +1,5 @@
 import { TopArtistType } from '@/lib/types';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Card } from './ui/card';
@@ -25,10 +26,14 @@ function TopArtist({ index, artistData }: TopArtistProps) {
         onClick={handleDialogOpen}
       >
         {/* TODO: look at best way to display non-square images */}
-        <img
+        <Image
           alt={artistData.name}
           className="h-16 w-16 rounded"
           src={artistData.images[0]?.url}
+          width={artistData.images[0]?.width}
+          height={artistData.images[0]?.height}
+          placeholder="blur"
+          blurDataURL={artistData.images[2]?.url}
         />
         <div className="min-w-0 flex-1">
           <p className="text-md font-medium leading-none text-white truncate">
@@ -54,10 +59,14 @@ function TopArtist({ index, artistData }: TopArtistProps) {
           </DialogHeader>
           <div className="flex flex-col items-center gap-4">
             <Link href={artistLink} target="_blank">
-              <img
+              <Image
                 alt={`${artistData.name}`}
                 className="h-64 w-64 rounded mb-4"
                 src={artistData.images[0]?.url}
+                width={artistData.images[0]?.width}
+                height={artistData.images[0]?.height}
+                placeholder="blur"
+                blurDataURL={artistData.images[2]?.url}
               />
             </Link>
           </div>

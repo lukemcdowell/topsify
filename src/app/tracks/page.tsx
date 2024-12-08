@@ -47,6 +47,7 @@ export default function TopTracks() {
         }
       } catch (error) {
         setError(true);
+        console.error(error);
       }
     };
 
