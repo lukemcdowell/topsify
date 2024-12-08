@@ -62,9 +62,9 @@ export default function TopTracks() {
   return (
     <div className="flex flex-col justify-center items-center">
       <PageHeader
-        title="Your top tracks"
         timeRange={selectedTimeRange}
         setTimeRange={setSelectedTimeRange}
+        selected="tracks"
       />
 
       <Top50Grid>

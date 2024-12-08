@@ -47,7 +47,7 @@ export default function TopTracks() {
 
   return (
     <div className="flex justify-center items-center h-full">
-      <div className="grid gap-16 xs:gap-24 grid-cols-1 md:grid-cols-2 pt-6 xs:pt-16 pb-5">
+      <div className="grid gap-2 sm:gap-16 grid-cols-1 sm:grid-cols-2 pb-5">
         <Top5Card itemType="tracks">
           {loading
             ? Array.from({ length: 5 }).map((_, index) => (

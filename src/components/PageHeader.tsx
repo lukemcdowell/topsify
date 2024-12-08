@@ -6,20 +6,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TimeRangeType } from '@/lib/types';
-import { Plus } from 'lucide-react';
+import { ChevronDown, Plus } from 'lucide-react';
 import Navigation from './Navigation';
 import { Button } from './ui/button';
 
 interface PageHeaderProps {
-  title: string;
   timeRange: TimeRangeType;
   setTimeRange: (newTimeRange: TimeRangeType) => void;
+  selected: 'tracks' | 'artists';
 }
 
 export default function PageHeader({
-  title,
   timeRange,
   setTimeRange,
+  selected,
 }: PageHeaderProps) {
   const timeRangeMapping = {
     short_term: 'Last 4 weeks',
@@ -29,15 +29,15 @@ export default function PageHeader({
 
   return (
     <>
-      <Navigation />
-      <div className="w-full flex justify-between items-center gap-2 p-2">
-        <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          {title}
-        </h2>
-        <div className="flex gap-2">
+      <div className="container w-full flex flex-col sm:flex-row justify-between items-center gap-2 pt-4 sm:pt-2">
+        <Navigation selected={selected} />
+        <div className="flex gap-2 justify-center items-center w-full sm:w-auto px-2 sm:px-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">{`Time range: ${timeRangeMapping[timeRange]}`}</Button>
+              <Button variant="outline" className="w-full">
+                {timeRangeMapping[timeRange]}
+                <ChevronDown />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-background">
               <DropdownMenuRadioGroup
