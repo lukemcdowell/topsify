@@ -47,17 +47,12 @@ export default function TopTracks() {
   if (error) return <p>Error loading top items</p>;
 
   return (
-    <div className="flex flex-col justify-center items-center h-full">
+    <div className="flex flex-col pt-4 items-center h-full">
       <div className="flex flex-col gap-2 pb-2">
-        <p className="scroll-m-20 text-xl font-semibold tracking-tight pb-2">
-          Your top 5 tracks and artists, all in one place.
+        <p className="scroll-m-20 text-xl font-semibold tracking-tight text-center px-5 sm:px-0 pb-2">
+          Your top tracks and artists, all in one place
         </p>
       </div>
-
-      {/* <p className="leading-7 [&:not(:first-child)]:mt-6">
-        Your top 5 tracks and artists, all in one place. Click "View All" to
-        explore your full top 50!
-      </p> */}
       <div className="grid gap-2 sm:gap-16 grid-cols-1 sm:grid-cols-2 pb-5">
         <Top5Card itemType="tracks">
           {loading
