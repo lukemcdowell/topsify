@@ -7,8 +7,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TimeRangeType } from '@/lib/types';
 import { ChevronDown, Plus } from 'lucide-react';
+import { useState } from 'react';
 import Navigation from './Navigation';
 import { Button } from './ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Switch } from './ui/switch';
 
 interface PageHeaderProps {
   timeRange: TimeRangeType;
@@ -25,6 +36,12 @@ export default function PageHeader({
     short_term: 'Last 4 weeks',
     medium_term: 'Last 6 months',
     long_term: 'Last 12 months',
+  };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const defaultPlaylistName = timeRangeMapping[timeRange].toLowerCase();
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
   };
 
   return (
@@ -56,11 +73,38 @@ export default function PageHeader({
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button>
+          <Button onClick={handleDialogOpen}>
             Create playlist <Plus />
           </Button>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] text-white">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold mb-1">
+              Create playlist
+            </DialogTitle>
+            <DialogDescription>
+              Make a playlist from your favorite Spotify tracks.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid w-full max-w-sm items-center gap-2 mt-4">
+            <Label>Playlist name: </Label>
+            <Input placeholder={`My top tracks ${defaultPlaylistName}`} />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch id="private-playlist" />
+            <Label htmlFor="private-playlist">Make playlist public</Label>
+          </div>
+
+          <Button onClick={handleDialogOpen} className="mt-6">
+            Create playlist <Plus />
+          </Button>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

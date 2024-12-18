@@ -30,7 +30,7 @@ export function createAuthURL(): string[] {
     redirect_uri: REDIRECT_URI,
     response_type: 'code',
     state,
-    scope: 'user-top-read',
+    scope: 'user-top-read playlist-modify-public playlist-modify-private',
   });
 
   return [`https://accounts.spotify.com/authorize?${params.toString()}`, state];
