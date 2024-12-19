@@ -33,12 +33,17 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  let items;
-  if (type === 'tracks') {
-    items = await getTopTracks(timeRange, Number(limit), accessToken);
-  } else {
-    items = await getTopArtists(timeRange, Number(limit), accessToken);
-  }
+  try {
+    let items;
+    if (type === 'tracks') {
+      items = await getTopTracks(timeRange, Number(limit), accessToken);
+    } else {
+      items = await getTopArtists(timeRange, Number(limit), accessToken);
+    }
 
-  return NextResponse.json(items);
+    return NextResponse.json(items);
+  } catch (error) {
+    console.error('Error getting top items:', error);
+    return new NextResponse('Error getting top items', { status: 500 });
+  }
 }
