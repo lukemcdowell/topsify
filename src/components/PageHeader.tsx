@@ -45,21 +45,20 @@ export default function PageHeader({
   };
   const defaultPlaylistName = `My ${timeRangeMapping[
     timeRange
-  ].toLowerCase()} top tracks`;
+  ].toLowerCase()} top ${selected === 'tracks' ? 'tracks' : 'artists'}`;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [playlistName, setPlaylistName] = useState('');
   const [publicPlaylist, setPublicPlaylist] = useState(false);
 
   const handleCreatePlaylist = async () => {
-    const newPlaylistName = playlistName || defaultPlaylistName;
-
     try {
       const response = await fetch('/api/createPlaylist', {
         method: 'POST',
         body: JSON.stringify({
-          playlistName: playlistName,
+          type: selected,
+          playlistName: playlistName || defaultPlaylistName,
           publicPlaylist: publicPlaylist,
-          uris: trackUris,
+          uris: selected === 'tracks' ? trackUris : artistUris,
         }),
       });
 

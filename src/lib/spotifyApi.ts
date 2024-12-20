@@ -256,3 +256,32 @@ export async function addTracksToPlaylist(
     throw error;
   }
 }
+
+// get an artists top track
+export async function getArtistTopTrack(
+  artistId: string,
+  accessToken: string
+): Promise<string> {
+  const url = `https://api.spotify.com/v1/artists/${artistId}/top-tracks`;
+
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error getting artist top track: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data.tracks[0].uri as string;
+  } catch (error) {
+    console.error('Error getting artist top track:', error);
+    throw error;
+  }
+}
