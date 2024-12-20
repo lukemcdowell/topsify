@@ -51,4 +51,5 @@ export type TopArtistType = {
     width: number;
   }[];
   name: string;
+  uri: string;
 };

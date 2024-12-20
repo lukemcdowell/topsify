@@ -7,13 +7,20 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value;
-  const { playlistName, isPublic, trackUris } = await request.json();
+  const { playlistName, publicPlaylist, uris } = await request.json();
+  console.log(playlistName, publicPlaylist, uris);
 
   if (!accessToken) {
     return NextResponse.redirect(new URL('/api/login', request.url));
   }
 
-  if (!trackUris || trackUris.length === 0) {
+  if (!playlistName) {
+    return new NextResponse('Error: no name supplied', {
+      status: 400,
+    });
+  }
+
+  if (!uris || uris.length === 0) {
     return new NextResponse('Error: trackUris supplied', {
       status: 400,
     });
@@ -25,11 +32,11 @@ export async function POST(request: NextRequest) {
     const playlistId = await createPlaylist(
       userId,
       playlistName,
-      isPublic,
+      publicPlaylist,
       accessToken
     );
 
-    await addTracksToPlaylist(playlistId, trackUris, accessToken);
+    await addTracksToPlaylist(playlistId, uris, accessToken);
     return new NextResponse(JSON.stringify({ playlistId }), { status: 201 });
   } catch (error) {
     console.error('Error creating playlist:', error);

@@ -22,6 +22,10 @@ export default function TopTracks() {
     short_term: topShortTermArtists,
   };
 
+  const getArtistUris = (artists: TopArtistType[]) => {
+    return artists.map((artists) => artists.uri);
+  };
+
   useEffect(() => {
     const fetchTopArtists = async (timeRange: string) => {
       try {
@@ -66,6 +70,7 @@ export default function TopTracks() {
         timeRange={selectedTimeRange}
         setTimeRange={setSelectedTimeRange}
         selected="artists"
+        artistUris={getArtistUris(topArtists[selectedTimeRange])}
       />
 
       <Top50Grid>

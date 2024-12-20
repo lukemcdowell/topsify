@@ -189,13 +189,13 @@ export async function getTopArtists(
 export async function createPlaylist(
   userId: string,
   playlistName: string,
-  isPublic: boolean,
+  publicPlaylist: boolean,
   accessToken: string
 ): Promise<string> {
   const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
   const body = JSON.stringify({
     name: playlistName,
-    public: isPublic,
+    public: publicPlaylist,
     description: 'Created with Topsify: https://topsify.vercel.app',
   });
 

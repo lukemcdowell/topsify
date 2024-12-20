@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,20 +27,51 @@ interface PageHeaderProps {
   timeRange: TimeRangeType;
   setTimeRange: (newTimeRange: TimeRangeType) => void;
   selected: 'tracks' | 'artists';
+  trackUris?: string[];
+  artistUris?: string[];
 }
 
 export default function PageHeader({
   timeRange,
   setTimeRange,
   selected,
+  trackUris,
+  artistUris,
 }: PageHeaderProps) {
   const timeRangeMapping = {
-    short_term: 'Last 4 weeks',
-    medium_term: 'Last 6 months',
-    long_term: 'Last 12 months',
+    short_term: 'Short term',
+    medium_term: 'Medium term',
+    long_term: 'Long term',
   };
+  const defaultPlaylistName = `My ${timeRangeMapping[
+    timeRange
+  ].toLowerCase()} top tracks`;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const defaultPlaylistName = timeRangeMapping[timeRange].toLowerCase();
+  const [playlistName, setPlaylistName] = useState('');
+  const [publicPlaylist, setPublicPlaylist] = useState(false);
+
+  const handleCreatePlaylist = async () => {
+    const newPlaylistName = playlistName || defaultPlaylistName;
+
+    try {
+      const response = await fetch('/api/createPlaylist', {
+        method: 'POST',
+        body: JSON.stringify({
+          playlistName: playlistName,
+          publicPlaylist: publicPlaylist,
+          uris: trackUris,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Playlist created successfully!');
+      } else {
+        console.error('Failed to create playlist');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleDialogOpen = () => {
     setIsDialogOpen(true);
@@ -86,21 +119,31 @@ export default function PageHeader({
               Create playlist
             </DialogTitle>
             <DialogDescription>
-              Make a playlist from your favorite Spotify tracks.
+              {selected === 'tracks'
+                ? 'Make a playlist from your favourite tracks.'
+                : "Make a playlist from your favourite artist's top tracks."}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid w-full max-w-sm items-center gap-2 mt-4">
             <Label>Playlist name: </Label>
-            <Input placeholder={`My top tracks ${defaultPlaylistName}`} />
+            <Input
+              placeholder={defaultPlaylistName}
+              value={playlistName}
+              onChange={(e) => setPlaylistName(e.target.value)}
+            />
           </div>
 
           <div className="flex items-center space-x-2">
-            <Switch id="private-playlist" />
+            <Switch
+              id="private-playlist"
+              checked={publicPlaylist}
+              onCheckedChange={(checked) => setPublicPlaylist(checked)}
+            />
             <Label htmlFor="private-playlist">Make playlist public</Label>
           </div>
 
-          <Button onClick={handleDialogOpen} className="mt-6">
+          <Button onClick={handleCreatePlaylist} className="mt-6">
             Create playlist <Plus />
           </Button>
         </DialogContent>
