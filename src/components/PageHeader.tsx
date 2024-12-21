@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TimeRangeType } from '@/lib/types';
-import { ChevronDown, Plus } from 'lucide-react';
+import { ChevronDown, Loader2, Plus } from 'lucide-react';
 import { useState } from 'react';
 import Navigation from './Navigation';
 import { Button } from './ui/button';
@@ -49,8 +49,10 @@ export default function PageHeader({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [playlistName, setPlaylistName] = useState('');
   const [publicPlaylist, setPublicPlaylist] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleCreatePlaylist = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/createPlaylist', {
         method: 'POST',
@@ -70,6 +72,7 @@ export default function PageHeader({
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
   };
 
   const handleDialogOpen = () => {
@@ -141,10 +144,16 @@ export default function PageHeader({
             />
             <Label htmlFor="private-playlist">Make playlist public</Label>
           </div>
-
-          <Button onClick={handleCreatePlaylist} className="mt-6">
-            Create playlist <Plus />
-          </Button>
+          {loading ? (
+            <Button disabled className="mt-6">
+              <Loader2 className="animate-spin" />
+              Creating playlist...
+            </Button>
+          ) : (
+            <Button onClick={handleCreatePlaylist} className="mt-6">
+              Create playlist <Plus />
+            </Button>
+          )}
         </DialogContent>
       </Dialog>
     </>
