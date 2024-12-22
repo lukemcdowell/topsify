@@ -8,20 +8,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { TimeRangeType } from '@/lib/types';
-import { ChevronDown, Loader2, Plus } from 'lucide-react';
+import { ChevronDown, Plus } from 'lucide-react';
 import { useState } from 'react';
+import CreatePlaylist from './CreatePlaylist';
 import Navigation from './Navigation';
 import { Button } from './ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from './ui/dialog';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Switch } from './ui/switch';
 
 interface PageHeaderProps {
   timeRange: TimeRangeType;
@@ -47,33 +38,6 @@ export default function PageHeader({
     timeRange
   ].toLowerCase()} top ${selected === 'tracks' ? 'tracks' : 'artists'}`;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [playlistName, setPlaylistName] = useState('');
-  const [publicPlaylist, setPublicPlaylist] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleCreatePlaylist = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/createPlaylist', {
-        method: 'POST',
-        body: JSON.stringify({
-          type: selected,
-          playlistName: playlistName || defaultPlaylistName,
-          publicPlaylist: publicPlaylist,
-          uris: selected === 'tracks' ? trackUris : artistUris,
-        }),
-      });
-
-      if (response.ok) {
-        console.log('Playlist created successfully!');
-      } else {
-        console.error('Failed to create playlist');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    setLoading(false);
-  };
 
   const handleDialogOpen = () => {
     setIsDialogOpen(true);
@@ -114,48 +78,14 @@ export default function PageHeader({
         </div>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold mb-1">
-              Create playlist
-            </DialogTitle>
-            <DialogDescription>
-              {selected === 'tracks'
-                ? 'Make a playlist from your favourite tracks.'
-                : "Make a playlist from your favourite artist's top tracks."}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="grid w-full max-w-sm items-center gap-2 mt-4">
-            <Label>Playlist name: </Label>
-            <Input
-              placeholder={defaultPlaylistName}
-              value={playlistName}
-              onChange={(e) => setPlaylistName(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="private-playlist"
-              checked={publicPlaylist}
-              onCheckedChange={(checked) => setPublicPlaylist(checked)}
-            />
-            <Label htmlFor="private-playlist">Make playlist public</Label>
-          </div>
-          {loading ? (
-            <Button disabled className="mt-6">
-              <Loader2 className="animate-spin" />
-              Creating playlist...
-            </Button>
-          ) : (
-            <Button onClick={handleCreatePlaylist} className="mt-6">
-              Create playlist <Plus />
-            </Button>
-          )}
-        </DialogContent>
-      </Dialog>
+      <CreatePlaylist
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        selected={selected}
+        trackUris={trackUris}
+        artistUris={artistUris}
+        defaultPlaylistName={defaultPlaylistName}
+      />
     </>
   );
 }
