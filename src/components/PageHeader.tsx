@@ -30,9 +30,9 @@ export default function PageHeader({
   artistUris,
 }: PageHeaderProps) {
   const timeRangeMapping = {
-    short_term: 'Short term',
-    medium_term: 'Medium term',
-    long_term: 'Long term',
+    short_term: 'Short-term',
+    medium_term: 'Medium-term',
+    long_term: 'Long-term',
   };
   const defaultPlaylistName = `My ${timeRangeMapping[
     timeRange
