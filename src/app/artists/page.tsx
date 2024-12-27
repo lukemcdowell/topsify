@@ -4,7 +4,9 @@ import PageHeader from '@/components/PageHeader';
 import Top50Grid from '@/components/Top50Grid';
 import TopArtist from '@/components/TopArtist';
 import TopArtistSkeleton from '@/components/TopArtistSkeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TimeRangeType, TopArtistType } from '@/lib/types';
+import { AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function TopTracks() {
@@ -62,7 +64,17 @@ export default function TopTracks() {
     fetchTopArtists('short_term');
   }, []);
 
-  if (error) return <p>Error loading top artists</p>;
+  if (error)
+    return (
+      <Alert variant="destructive" className="mt-4">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          An error occurred while fetching your top artists. Please try again
+          later.
+        </AlertDescription>
+      </Alert>
+    );
 
   return (
     <div className="flex flex-col justify-center items-center">

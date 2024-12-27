@@ -1,5 +1,7 @@
-import { Loader2, Plus } from 'lucide-react';
+import { ExternalLink, ListCheck, Loader2, Plus } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -106,9 +108,18 @@ function CreatePlaylist({
         </DialogHeader>
 
         {playlistCreated ? (
-          <h1 className="mt-4 text-primary">Playlist created successfully!</h1>
+          <Alert>
+            <ListCheck className="h-4 w-4" />
+            <AlertTitle>Playlist created!</AlertTitle>
+            <AlertDescription>
+              {/* TODO: add link to playlist */}
+              <Link className="text-primary" href={``}>
+                Open in Spotify.
+                <ExternalLink />
+              </Link>
+            </AlertDescription>
+          </Alert>
         ) : (
-          // TODO: add link to new playlist
           newPlaylistDetails
         )}
       </DialogContent>

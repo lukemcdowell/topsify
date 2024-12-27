@@ -5,7 +5,9 @@ import TopArtist from '@/components/TopArtist';
 import TopArtistSkeleton from '@/components/TopArtistSkeleton';
 import TopTrack from '@/components/TopTrack';
 import TopTrackSkeleton from '@/components/TopTrackSkeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { TopArtistType, TopTrackType } from '@/lib/types';
+import { AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function TopTracks() {
@@ -44,7 +46,17 @@ export default function TopTracks() {
     fetchTopData();
   }, []);
 
-  if (error) return <p>Error loading top items</p>;
+  if (error)
+    return (
+      <Alert variant="destructive" className="mt-4">
+        <AlertCircle className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          An error occurred while fetching your top tracks and artists. Please
+          try again later.
+        </AlertDescription>
+      </Alert>
+    );
 
   return (
     <div className="flex flex-col pt-4 items-center h-full">
