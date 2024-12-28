@@ -35,6 +35,7 @@ function CreatePlaylist({
   const [publicPlaylist, setPublicPlaylist] = useState(false);
   const [loading, setLoading] = useState(false);
   const [playlistCreated, setPlaylistCreated] = useState(false);
+  const [playlistId, setPlaylistId] = useState('');
 
   const handleCreatePlaylist = async () => {
     setLoading(true);
@@ -51,6 +52,7 @@ function CreatePlaylist({
 
       if (response.ok) {
         console.log('Playlist created successfully!');
+        setPlaylistId((await response.json()).playlistId);
       } else {
         console.error('Failed to create playlist');
       }
@@ -112,8 +114,11 @@ function CreatePlaylist({
             <ListCheck className="h-4 w-4" />
             <AlertTitle>Playlist created!</AlertTitle>
             <AlertDescription>
-              {/* TODO: add link to playlist */}
-              <Link className="text-primary" href={``}>
+              {/* TODO: style */}
+              <Link
+                className="text-primary"
+                href={`https://open.spotify.com/playlist/${playlistId}`}
+              >
                 Open in Spotify.
                 <ExternalLink />
               </Link>
