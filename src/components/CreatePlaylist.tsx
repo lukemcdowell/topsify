@@ -120,7 +120,10 @@ function CreatePlaylist({
 
         {playlistCreated ? (
           <Button>
-            <Link href={`https://open.spotify.com/playlist/${playlistId}`}>
+            <Link
+              href={`https://open.spotify.com/playlist/${playlistId}`}
+              target="_blank"
+            >
               Open in Spotify
             </Link>
             <ExternalLink />
