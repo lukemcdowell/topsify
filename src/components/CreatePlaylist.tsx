@@ -1,7 +1,6 @@
-import { ExternalLink, ListCheck, Loader2, Plus } from 'lucide-react';
+import { ExternalLink, Loader2, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -63,6 +62,14 @@ function CreatePlaylist({
     setPlaylistCreated(true);
   };
 
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setPlaylistCreated(false);
+    setPlaylistId('');
+    setPlaylistName('');
+    setPublicPlaylist(false);
+  };
+
   const newPlaylistDetails = (
     <>
       <div className="grid w-full max-w-sm items-center gap-2 mt-4">
@@ -96,34 +103,28 @@ function CreatePlaylist({
   );
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Dialog open={isDialogOpen} onOpenChange={handleCloseDialog}>
       <DialogContent className="sm:max-w-[425px] text-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold mb-1">
             Create playlist
           </DialogTitle>
           <DialogDescription>
-            {selected === 'tracks'
+            {playlistCreated
+              ? 'Playlist created successfully!'
+              : selected === 'tracks'
               ? 'Make a playlist from your favourite tracks.'
               : "Make a playlist from your favourite artist's top tracks."}
           </DialogDescription>
         </DialogHeader>
 
         {playlistCreated ? (
-          <Alert>
-            <ListCheck className="h-4 w-4" />
-            <AlertTitle>Playlist created!</AlertTitle>
-            <AlertDescription>
-              {/* TODO: style */}
-              <Link
-                className="text-primary"
-                href={`https://open.spotify.com/playlist/${playlistId}`}
-              >
-                Open in Spotify.
-                <ExternalLink />
-              </Link>
-            </AlertDescription>
-          </Alert>
+          <Button>
+            <Link href={`https://open.spotify.com/playlist/${playlistId}`}>
+              Open in Spotify
+            </Link>
+            <ExternalLink />
+          </Button>
         ) : (
           newPlaylistDetails
         )}
