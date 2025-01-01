@@ -62,23 +62,13 @@ function TopTrack({ index, trackData }: TopTrackProps) {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="text-white max-w-md">
-        <DialogHeader className="w-full min-w-0">
+        <DialogContent className="text-white max-w-sm">
+          <DialogHeader className="w-full min-w-0">
             <DialogTitle className="text-2xl font-bold mb-1 flex">
-              <span className="text-2xl text-primary pr-3">#{index + 1}:</span>
-              <div className="min-w-0 w-full">
-                <Link
-                  href={trackLink}
-                  className="text-2xl font-semibold hover:underline truncate block"
-                  target="_blank"
-                >
-                  {trackData.name}
-                </Link>
-                {renderArtistLinks()}
-              </div>
+              <span className="text-2xl text-primary pr-3">#{index + 1}</span>
             </DialogTitle>
           </DialogHeader>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center w-full min-w-0">
             <Link href={albumLink} target="_blank">
               <Image
                 alt={`${trackData.name} by ${trackData.artists[0].name}`}
@@ -90,6 +80,14 @@ function TopTrack({ index, trackData }: TopTrackProps) {
                 blurDataURL={trackData.album.images[2]?.url}
               />
             </Link>
+            <Link
+              href={trackLink}
+              className="text-2xl text-center font-semibold hover:underline w-full truncate block"
+              target="_blank"
+            >
+              {trackData.name}
+            </Link>
+            {renderArtistLinks()}
           </div>
         </DialogContent>
       </Dialog>
