@@ -43,14 +43,14 @@ function TopArtist({ index, artistData }: TopArtistProps) {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold mb-1">
+        <DialogContent className="text-white max-w-md">
+          <DialogHeader className="w-full min-w-0">
+            <DialogTitle className="text-2xl font-bold mb-1 flex">
               <span className="text-2xl text-primary pr-3">#{index + 1}:</span>
 
               <Link
                 href={artistLink}
-                className="text-2xl font-semibold hover:underline truncate"
+                className="text-2xl font-semibold hover:underline truncate block"
                 target="_blank"
               >
                 {artistData.name}
@@ -61,7 +61,7 @@ function TopArtist({ index, artistData }: TopArtistProps) {
             <Link href={artistLink} target="_blank">
               <Image
                 alt={`${artistData.name}`}
-                className="h-64 w-64 rounded mb-4"
+                className="h-80 w-80 rounded mb-4"
                 src={artistData.images[0]?.url}
                 width={artistData.images[0]?.width}
                 height={artistData.images[0]?.height}

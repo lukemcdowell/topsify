@@ -18,7 +18,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
   const albumLink = trackData.album.external_urls.spotify;
 
   const renderArtistLinks = () => (
-    <div className="flex gap-1 ml-12">
+    <div className="flex gap-1">
       {trackData.artists.map((artist, index) => (
         <Link
           key={index}
@@ -62,27 +62,27 @@ function TopTrack({ index, trackData }: TopTrackProps) {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px] text-white">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold mb-1">
+        <DialogContent className="text-white max-w-md">
+        <DialogHeader className="w-full min-w-0">
+            <DialogTitle className="text-2xl font-bold mb-1 flex">
               <span className="text-2xl text-primary pr-3">#{index + 1}:</span>
-
-              {/* TODO: fix long track names overflowing */}
-              <Link
-                href={trackLink}
-                className="text-2xl font-semibold hover:underline truncate"
-                target="_blank"
-              >
-                {trackData.name}
-              </Link>
-              {renderArtistLinks()}
+              <div className="min-w-0 w-full">
+                <Link
+                  href={trackLink}
+                  className="text-2xl font-semibold hover:underline truncate block"
+                  target="_blank"
+                >
+                  {trackData.name}
+                </Link>
+                {renderArtistLinks()}
+              </div>
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center gap-4">
             <Link href={albumLink} target="_blank">
               <Image
                 alt={`${trackData.name} by ${trackData.artists[0].name}`}
-                className="h-64 w-64 rounded mb-4"
+                className="h-80 w-80 rounded mb-4"
                 src={trackData.album.images[0]?.url}
                 width={trackData.album.images[0]?.width}
                 height={trackData.album.images[0]?.height}
