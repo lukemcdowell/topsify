@@ -4,6 +4,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Card } from './ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
 
 interface TopTrackProps {
   index: number;
@@ -40,26 +46,41 @@ function TopTrack({ index, trackData }: TopTrackProps) {
 
   return (
     <>
-      <Card
-        className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer"
-        onClick={handleDialogOpen}
-      >
-        <Image
-          alt={`${trackData.name} by ${artistList}`}
-          className="h-16 w-16 rounded"
-          src={trackData.album.images[0]?.url}
-          width={trackData.album.images[0]?.width}
-          height={trackData.album.images[0]?.height}
-          placeholder="blur"
-          blurDataURL={trackData.album.images[2]?.url}
-        />
-        <div className="min-w-0 flex-1">
-          <p className="text-md font-medium leading-none text-white truncate">
-            {trackData.name}
-          </p>
-          <p className="text-sm text-zinc-400 mt-1 truncate">{artistList}</p>
-        </div>
-      </Card>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Card
+              className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer"
+              onClick={handleDialogOpen}
+            >
+              <Image
+                alt={`${trackData.name} by ${artistList}`}
+                className="h-16 w-16 rounded"
+                src={trackData.album.images[0]?.url}
+                width={trackData.album.images[0]?.width}
+                height={trackData.album.images[0]?.height}
+                placeholder="blur"
+                blurDataURL={trackData.album.images[2]?.url}
+              />
+              <div className="min-w-0 flex-1 text-start">
+                <p className="text-md font-medium leading-none text-white truncate">
+                  {trackData.name}
+                </p>
+                <p className="text-sm text-zinc-400 mt-1 truncate">
+                  {artistList}
+                </p>
+              </div>
+            </Card>
+          </TooltipTrigger>
+          <TooltipContent className="flex gap-2 text-md">
+            <span className="text-primary">#{index + 1}: </span>
+            <div className="text-md">
+              <div>{trackData.name}</div>
+              <div className="text-sm text-zinc-400">{artistList}</div>
+            </div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="text-white max-w-sm">
