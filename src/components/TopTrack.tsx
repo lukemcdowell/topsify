@@ -108,7 +108,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
             >
               {trackData.name}
             </Link>
-            {renderArtistLinks()}
+            <div className="w-full truncate block">{renderArtistLinks()}</div>
           </div>
         </DialogContent>
       </Dialog>

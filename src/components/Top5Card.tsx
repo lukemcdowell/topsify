@@ -34,7 +34,7 @@ function Top5Card({ itemType, children }: Top5CardProps) {
       <CardHeader>
         <div className="flex gap-2 justify-between">
           <div>
-            <CardTitle className="pb-2">{cardText.title}</CardTitle>
+            <CardTitle>{cardText.title}</CardTitle>
             <CardDescription>{cardText.description}</CardDescription>
           </div>
           <Button asChild>
