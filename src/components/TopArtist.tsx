@@ -4,6 +4,12 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Card } from './ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
 
 interface TopArtistProps {
   index: number;
@@ -21,26 +27,36 @@ function TopArtist({ index, artistData }: TopArtistProps) {
 
   return (
     <>
-      <Card
-        className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer"
-        onClick={handleDialogOpen}
-      >
-        {/* TODO: look at best way to display non-square images */}
-        <Image
-          alt={artistData.name}
-          className="h-16 w-16 rounded"
-          src={artistData.images[0]?.url}
-          width={artistData.images[0]?.width}
-          height={artistData.images[0]?.height}
-          placeholder="blur"
-          blurDataURL={artistData.images[2]?.url}
-        />
-        <div className="min-w-0 flex-1">
-          <p className="text-md font-medium leading-none text-white truncate">
-            {artistData.name}
-          </p>
-        </div>
-      </Card>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Card
+              className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer"
+              onClick={handleDialogOpen}
+            >
+              {/* TODO: look at best way to display non-square images */}
+              <Image
+                alt={artistData.name}
+                className="h-16 w-16 rounded"
+                src={artistData.images[0]?.url}
+                width={artistData.images[0]?.width}
+                height={artistData.images[0]?.height}
+                placeholder="blur"
+                blurDataURL={artistData.images[2]?.url}
+              />
+              <div className="min-w-0 flex-1 text-start">
+                <p className="text-md font-medium leading-none text-white truncate">
+                  {artistData.name}
+                </p>
+              </div>
+            </Card>
+          </TooltipTrigger>
+          <TooltipContent className="flex gap-2 text-md">
+            <span className="text-primary">#{index + 1}: </span>
+            <div className="text-md">{artistData.name}</div>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="text-white max-w-sm">
