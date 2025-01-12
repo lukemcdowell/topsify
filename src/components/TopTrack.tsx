@@ -1,7 +1,8 @@
 import { TopTrackType } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Marquee from 'react-fast-marquee';
 import { Card } from './ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import {
@@ -18,10 +19,21 @@ interface TopTrackProps {
 
 function TopTrack({ index, trackData }: TopTrackProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const parentRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const artistList = trackData.artists.map((artist) => artist.name).join(', ');
   const trackLink = trackData.external_urls.spotify;
   const albumLink = trackData.album.external_urls.spotify;
+
+  useEffect(() => {
+    if (parentRef.current && contentRef.current) {
+      const parentWidth = parentRef.current.offsetWidth;
+      const contentWidth = contentRef.current.scrollWidth;
+      setIsOverflowing(contentWidth > parentWidth);
+    }
+  }, [trackData.artists]);
 
   const renderArtistLinks = () => (
     <div className="flex gap-1">
@@ -86,7 +98,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
         <DialogContent className="text-white max-w-sm">
           <DialogHeader className="w-full min-w-0">
             <DialogTitle className="text-2xl font-bold mb-1 flex">
-              <span className="text-2xl text-primary pr-3">#{index + 1}</span>
+              <span className="text-2xl text-primary">#{index + 1}</span>
             </DialogTitle>
           </DialogHeader>
           <div className="flex flex-col items-center w-full min-w-0">
@@ -108,7 +120,18 @@ function TopTrack({ index, trackData }: TopTrackProps) {
             >
               {trackData.name}
             </Link>
-            <div className="w-full truncate block">{renderArtistLinks()}</div>
+            <div
+              ref={parentRef}
+              className="w-full text-center flex justify-center items-center truncate"
+            >
+              {isOverflowing ? (
+                <Marquee pauseOnHover>
+                  <div ref={contentRef}>{renderArtistLinks()}</div>
+                </Marquee>
+              ) : (
+                <div ref={contentRef}>{renderArtistLinks()}</div>
+              )}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
