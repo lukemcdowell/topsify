@@ -34,10 +34,9 @@ function TopArtist({ index, artistData }: TopArtistProps) {
               className="flex items-center gap-3 p-2 w-full border hover:bg-zinc-900 hover:border-primary cursor-pointer"
               onClick={handleDialogOpen}
             >
-              {/* TODO: look at best way to display non-square images */}
               <Image
                 alt={artistData.name}
-                className="h-16 w-16 rounded"
+                className="h-16 w-16 rounded object-contain"
                 src={artistData.images[0]?.url}
                 width={artistData.images[0]?.width}
                 height={artistData.images[0]?.height}
@@ -69,7 +68,7 @@ function TopArtist({ index, artistData }: TopArtistProps) {
             <Link href={artistLink} target="_blank">
               <Image
                 alt={`${artistData.name}`}
-                className="h-80 w-80 rounded mb-4"
+                className="h-80 w-80 rounded object-contain mb-4"
                 src={artistData.images[0]?.url}
                 width={artistData.images[0]?.width}
                 height={artistData.images[0]?.height}
