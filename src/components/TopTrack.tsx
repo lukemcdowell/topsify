@@ -1,8 +1,7 @@
 import { TopTrackType } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
-import Marquee from 'react-fast-marquee';
+import { useState } from 'react';
 import { Card } from './ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import {
@@ -19,35 +18,25 @@ interface TopTrackProps {
 
 function TopTrack({ index, trackData }: TopTrackProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const parentRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const artistList = trackData.artists.map((artist) => artist.name).join(', ');
   const trackLink = trackData.external_urls.spotify;
   const albumLink = trackData.album.external_urls.spotify;
 
-  useEffect(() => {
-    if (parentRef.current && contentRef.current) {
-      const parentWidth = parentRef.current.offsetWidth;
-      const contentWidth = contentRef.current.scrollWidth;
-      setIsOverflowing(contentWidth > parentWidth);
-    }
-  }, [trackData.artists]);
-
   const renderArtistLinks = () => (
-    <div className="flex gap-1">
+    <div>
       {trackData.artists.map((artist, index) => (
-        <Link
-          key={index}
-          href={artist.external_urls.spotify}
-          className="text-lg text-zinc-300 hover:underline truncate"
-          target="_blank"
-        >
-          {index === trackData.artists.length - 1
-            ? artist.name
-            : `${artist.name}, `}
-        </Link>
+        <>
+          <Link
+            key={index}
+            href={artist.external_urls.spotify}
+            className="text-lg text-zinc-300 hover:underline"
+            target="_blank"
+          >
+            {artist.name}
+          </Link>
+          <span>{index === trackData.artists.length - 1 ? '' : `, `}</span>
+        </>
       ))}
     </div>
   );
@@ -120,18 +109,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
             >
               {trackData.name}
             </Link>
-            <div
-              ref={parentRef}
-              className="w-full text-center flex justify-center items-center truncate"
-            >
-              {isOverflowing ? (
-                <Marquee pauseOnHover>
-                  <div ref={contentRef}>{renderArtistLinks()}</div>
-                </Marquee>
-              ) : (
-                <div ref={contentRef}>{renderArtistLinks()}</div>
-              )}
-            </div>
+            {renderArtistLinks()}
           </div>
         </DialogContent>
       </Dialog>
