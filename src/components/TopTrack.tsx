@@ -24,7 +24,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
   const albumLink = trackData.album.external_urls.spotify;
 
   const renderArtistLinks = () => (
-    <div>
+    <div className="text-center">
       {trackData.artists.map((artist, index) => (
         <>
           <Link
