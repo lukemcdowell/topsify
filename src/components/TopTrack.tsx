@@ -26,9 +26,8 @@ function TopTrack({ index, trackData }: TopTrackProps) {
   const renderArtistLinks = () => (
     <div className="text-center">
       {trackData.artists.map((artist, index) => (
-        <>
+        <div key={artist.id} className="inline">
           <Link
-            key={index}
             href={artist.external_urls.spotify}
             className="text-lg text-zinc-300 hover:underline"
             target="_blank"
@@ -36,7 +35,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
             {artist.name}
           </Link>
           <span>{index === trackData.artists.length - 1 ? '' : `, `}</span>
-        </>
+        </div>
       ))}
     </div>
   );

@@ -1,5 +1,18 @@
 import { getTopArtists, getTopTracks } from '@/lib/spotifyApi';
+import { promises as fs } from 'fs';
 import { NextRequest, NextResponse } from 'next/server';
+import path from 'path';
+
+async function loadMockData(type: string) {
+  const mockDataPath = path.join(
+    process.cwd(),
+    type === 'tracks'
+      ? '/src/mock/mockTopTracks.json'
+      : '/src/mock/mockTopArists.json'
+  );
+  const mockData = await fs.readFile(mockDataPath, 'utf8');
+  return JSON.parse(mockData);
+}
 
 export async function GET(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value;
@@ -7,14 +20,20 @@ export async function GET(request: NextRequest) {
   const limit = request.nextUrl.searchParams.get('limit');
   const timeRange = request.nextUrl.searchParams.get('timeRange');
 
-  if (!accessToken) {
-    return NextResponse.redirect(new URL('/api/login', request.url));
-  }
-
   if (type !== 'tracks' && type !== 'artists') {
     return new NextResponse('Error: no valid type specified in params', {
       status: 500,
     });
+  }
+
+  if (process.env.MOCK && process.env.MOCK === 'true') {
+    console.log('Environment variable MOCK set to true: using mock data');
+    const mockData = await loadMockData(type);
+    return NextResponse.json(mockData);
+  }
+
+  if (!accessToken) {
+    return NextResponse.redirect(new URL('/api/login', request.url));
   }
 
   if (!limit) {
