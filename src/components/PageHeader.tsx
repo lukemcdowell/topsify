@@ -7,10 +7,17 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { TimeRangeType } from '@/lib/types';
-import { ChevronDown, Plus } from 'lucide-react';
+import { ChevronDown, Info, Plus } from 'lucide-react';
 import { useState } from 'react';
 import CreatePlaylist from './CreatePlaylist';
+import Information from './Information';
 import Navigation from './Navigation';
 import { Button } from './ui/button';
 
@@ -37,10 +44,11 @@ export default function PageHeader({
   const defaultPlaylistName = `My ${timeRangeMapping[
     timeRange
   ].toLowerCase()} top ${selected === 'tracks' ? 'tracks' : 'artists'}`;
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPlaylistDialogOpen, setIsPlaylistDialogOpen] = useState(false);
+  const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
 
   const handleDialogOpen = () => {
-    setIsDialogOpen(true);
+    setIsPlaylistDialogOpen(true);
   };
 
   return (
@@ -48,6 +56,20 @@ export default function PageHeader({
       <div className="container w-full flex flex-col sm:flex-row justify-between items-center gap-2 pt-4 sm:pt-2">
         <Navigation selected={selected} />
         <div className="flex gap-2 justify-center items-center w-full sm:w-auto px-2 sm:px-0">
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsInfoDialogOpen(true)}
+                  aria-label="about & how to use"
+                >
+                  <Info />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>About & How to Use</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full">
@@ -79,13 +101,15 @@ export default function PageHeader({
       </div>
 
       <CreatePlaylist
-        isDialogOpen={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
+        isDialogOpen={isPlaylistDialogOpen}
+        setIsDialogOpen={setIsPlaylistDialogOpen}
         selected={selected}
         trackUris={trackUris}
         artistUris={artistUris}
         defaultPlaylistName={defaultPlaylistName}
       />
+
+      <Information isOpen={isInfoDialogOpen} setIsOpen={setIsInfoDialogOpen} />
     </>
   );
 }
