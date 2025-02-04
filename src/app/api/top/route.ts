@@ -26,20 +26,20 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  if (process.env.MOCK && process.env.MOCK === 'true') {
-    console.log('Environment variable MOCK set to true: using mock data');
-    const mockData = await loadMockData(type);
-    return NextResponse.json(mockData);
-  }
-
-  if (!accessToken) {
-    return NextResponse.redirect(new URL('/api/login', request.url));
-  }
-
   if (!limit) {
     return new NextResponse('Error: no valid limit specified in params', {
       status: 500,
     });
+  }
+
+  if (process.env.MOCK && process.env.MOCK === 'true') {
+    console.log('Environment variable MOCK set to true: using mock data');
+    const mockData = await loadMockData(type);
+    return NextResponse.json(mockData.slice(0, Number(limit)));
+  }
+
+  if (!accessToken) {
+    return NextResponse.redirect(new URL('/api/login', request.url));
   }
 
   if (
