@@ -1,9 +1,9 @@
-export type TopItemType = 'tracks' | 'artists';
-export type TimeRangeType = 'long_term' | 'medium_term' | 'short_term';
+export type TopItemType = "tracks" | "artists";
+export type TimeRangeType = "long_term" | "medium_term" | "short_term";
 
 export interface AccessTokenResponse {
   access_token: string;
-  refresh_token: string;
+  refresh_token?: string;
   expires_in: number;
   token_type: string;
   scope: string;

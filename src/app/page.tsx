@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import Top5Card from '@/components/Top5Card';
-import TopArtist from '@/components/TopArtist';
-import TopArtistSkeleton from '@/components/TopArtistSkeleton';
-import TopTrack from '@/components/TopTrack';
-import TopTrackSkeleton from '@/components/TopTrackSkeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { TopArtistType, TopTrackType } from '@/lib/types';
-import { AlertCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import Top5Card from "@/components/Top5Card";
+import TopArtist from "@/components/TopArtist";
+import TopArtistSkeleton from "@/components/TopArtistSkeleton";
+import TopTrack from "@/components/TopTrack";
+import TopTrackSkeleton from "@/components/TopTrackSkeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TopArtistType, TopTrackType } from "@/lib/types";
+import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function TopTracks() {
   const [topTracks, setTopTracks] = useState([]);

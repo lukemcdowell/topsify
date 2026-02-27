@@ -1,15 +1,15 @@
-import { TopArtistType } from '@/lib/types';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Card } from './ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { TopArtistType } from "@/lib/types";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { Card } from "./ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './ui/tooltip';
+} from "./ui/tooltip";
 
 interface TopArtistProps {
   index: number;

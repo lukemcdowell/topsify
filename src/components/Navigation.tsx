@@ -4,13 +4,13 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
-import { CircleUserRound, Disc3 } from 'lucide-react';
-import Link from 'next/link';
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+import { CircleUserRound, Disc3 } from "lucide-react";
+import Link from "next/link";
 
 interface NavigationProps {
-  selected: 'tracks' | 'artists';
+  selected: "tracks" | "artists";
 }
 
 function Navigation({ selected }: NavigationProps) {
@@ -23,7 +23,7 @@ function Navigation({ selected }: NavigationProps) {
               <NavigationMenuLink
                 className={cn(
                   navigationMenuTriggerStyle(),
-                  selected === 'tracks' && 'border border-primary'
+                  selected === "tracks" && "border border-primary",
                 )}
               >
                 <Disc3 className="pr-1" />
@@ -36,7 +36,7 @@ function Navigation({ selected }: NavigationProps) {
               <NavigationMenuLink
                 className={cn(
                   navigationMenuTriggerStyle(),
-                  selected === 'artists' && 'border border-primary'
+                  selected === "artists" && "border border-primary",
                 )}
               >
                 <CircleUserRound className="pr-1" />

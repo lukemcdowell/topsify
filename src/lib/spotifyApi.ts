@@ -1,24 +1,24 @@
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 import {
   AccessTokenResponse,
   TimeRangeType,
   TopArtistType,
   TopItemType,
   TopTrackType,
-} from './types';
-import { getEnvVariable } from './utils';
+} from "./types";
+import { getEnvVariable } from "./utils";
 
-const REDIRECT_URI = getEnvVariable('SPOTIFY_REDIRECT_URI');
-const CLIENT_ID = getEnvVariable('SPOTIFY_CLIENT_ID');
-const CLIENT_SECRET = getEnvVariable('SPOTIFY_CLIENT_SECRET');
+const REDIRECT_URI = getEnvVariable("SPOTIFY_REDIRECT_URI");
+const CLIENT_ID = getEnvVariable("SPOTIFY_CLIENT_ID");
+const CLIENT_SECRET = getEnvVariable("SPOTIFY_CLIENT_SECRET");
 
 // helper function to prevent CSRF attacks
 function generateRandomString(length: number): string {
   const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   return Array.from({ length })
     .map(() => characters.charAt(Math.floor(Math.random() * characters.length)))
-    .join('');
+    .join("");
 }
 
 // creates the URL for redirecting to Spotify's authorization page
@@ -28,9 +28,9 @@ export function createAuthURL(): string[] {
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
     redirect_uri: REDIRECT_URI,
-    response_type: 'code',
+    response_type: "code",
     state,
-    scope: 'user-top-read playlist-modify-public playlist-modify-private',
+    scope: "user-top-read playlist-modify-public playlist-modify-private",
   });
 
   return [`https://accounts.spotify.com/authorize?${params.toString()}`, state];
@@ -38,23 +38,23 @@ export function createAuthURL(): string[] {
 
 // requests the initial access and refresh tokens
 export async function requestAccessToken(code: string): Promise<string[]> {
-  const url = 'https://accounts.spotify.com/api/token';
+  const url = "https://accounts.spotify.com/api/token";
   const body = new URLSearchParams({
-    grant_type: 'authorization_code',
+    grant_type: "authorization_code",
     code,
     redirect_uri: REDIRECT_URI,
   });
 
   const headers = {
     Authorization:
-      'Basic ' +
-      Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64'),
-    'Content-Type': 'application/x-www-form-urlencoded',
+      "Basic " +
+      Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64"),
+    "Content-Type": "application/x-www-form-urlencoded",
   };
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body,
     });
@@ -65,33 +65,37 @@ export async function requestAccessToken(code: string): Promise<string[]> {
 
     const data: AccessTokenResponse = await response.json();
 
+    if (!data.refresh_token) {
+      throw new Error(`Error: refresh token is undefined`);
+    }
+
     return [data.access_token, data.refresh_token];
   } catch (error) {
-    console.error('Error requesting access token:', error);
+    console.error("Error requesting access token:", error);
     throw error;
   }
 }
 
 // uses the refresh token to request a new access token
 export async function requestRefreshedAccessToken(
-  refresh_token: string
+  refresh_token: string,
 ): Promise<string[]> {
-  const url = 'https://accounts.spotify.com/api/token';
+  const url = "https://accounts.spotify.com/api/token";
   const body = new URLSearchParams({
-    grant_type: 'refresh_token',
+    grant_type: "refresh_token",
     refresh_token,
   });
 
   const headers = {
     Authorization:
-      'Basic ' +
-      Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64'),
-    'Content-Type': 'application/x-www-form-urlencoded',
+      "Basic " +
+      Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64"),
+    "Content-Type": "application/x-www-form-urlencoded",
   };
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body,
     });
@@ -101,16 +105,16 @@ export async function requestRefreshedAccessToken(
     }
 
     const data: AccessTokenResponse = await response.json();
-    return [data.access_token, data.refresh_token];
+    return [data.access_token, data.refresh_token ?? refresh_token];
   } catch (error) {
-    console.error('Error refreshing access token:', error);
+    console.error("Error refreshing access token:", error);
     throw error;
   }
 }
 
 // get user id from spotify API
 export async function getUserId(accessToken: string): Promise<string> {
-  const url = 'https://api.spotify.com/v1/me';
+  const url = "https://api.spotify.com/v1/me";
 
   const headers = {
     Authorization: `Bearer ${accessToken}`,
@@ -118,7 +122,7 @@ export async function getUserId(accessToken: string): Promise<string> {
 
   try {
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers,
     });
 
@@ -129,7 +133,7 @@ export async function getUserId(accessToken: string): Promise<string> {
     const details = await response.json();
     return details.id;
   } catch (error) {
-    console.error('Error getting user details:', error);
+    console.error("Error getting user details:", error);
     throw error;
   }
 }
@@ -139,7 +143,7 @@ async function fetchTopItems<T>(
   itemType: TopItemType,
   timeRange: TimeRangeType,
   limit: number,
-  accessToken: string
+  accessToken: string,
 ): Promise<T[]> {
   const url = `https://api.spotify.com/v1/me/top/${itemType}`;
   const params = new URLSearchParams({
@@ -153,7 +157,7 @@ async function fetchTopItems<T>(
 
   try {
     const response = await fetch(`${url}?${params.toString()}`, {
-      method: 'GET',
+      method: "GET",
       headers,
     });
 
@@ -172,17 +176,17 @@ async function fetchTopItems<T>(
 export async function getTopTracks(
   timeRange: TimeRangeType,
   limit: number,
-  accessToken: string
+  accessToken: string,
 ): Promise<TopTrackType[]> {
-  return fetchTopItems<TopTrackType>('tracks', timeRange, limit, accessToken);
+  return fetchTopItems<TopTrackType>("tracks", timeRange, limit, accessToken);
 }
 
 export async function getTopArtists(
   timeRange: TimeRangeType,
   limit: number,
-  accessToken: string
+  accessToken: string,
 ): Promise<TopArtistType[]> {
-  return fetchTopItems<TopArtistType>('artists', timeRange, limit, accessToken);
+  return fetchTopItems<TopArtistType>("artists", timeRange, limit, accessToken);
 }
 
 // create a new playlist on the user's account
@@ -190,23 +194,23 @@ export async function createPlaylist(
   userId: string,
   playlistName: string,
   publicPlaylist: boolean,
-  accessToken: string
+  accessToken: string,
 ): Promise<string> {
   const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
   const body = JSON.stringify({
     name: playlistName,
     public: publicPlaylist,
-    description: 'Created with Topsify: https://topsify.vercel.app',
+    description: "Created with Topsify: https://topsify.vercel.app",
   });
 
   const headers = {
     Authorization: `Bearer ${accessToken}`,
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body,
     });
@@ -218,7 +222,7 @@ export async function createPlaylist(
     const newPlaylistDetails = await response.json();
     return newPlaylistDetails.id;
   } catch (error) {
-    console.error('Error creating playlist:', error);
+    console.error("Error creating playlist:", error);
     throw error;
   }
 }
@@ -227,7 +231,7 @@ export async function createPlaylist(
 export async function addTracksToPlaylist(
   playlistId: string,
   trackUris: string[],
-  accessToken: string
+  accessToken: string,
 ): Promise<void> {
   const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
   const body = JSON.stringify({
@@ -236,23 +240,23 @@ export async function addTracksToPlaylist(
 
   const headers = {
     Authorization: `Bearer ${accessToken}`,
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   };
 
   try {
     const response = await fetch(url, {
-      method: 'POST',
+      method: "POST",
       headers,
       body,
     });
 
     if (!response.ok) {
       throw new Error(
-        `Error adding tracks to playlist: ${response.statusText}`
+        `Error adding tracks to playlist: ${response.statusText}`,
       );
     }
   } catch (error) {
-    console.error('Error adding tracks to playlist:', error);
+    console.error("Error adding tracks to playlist:", error);
     throw error;
   }
 }
@@ -260,7 +264,7 @@ export async function addTracksToPlaylist(
 // get an artists top track
 export async function getArtistTopTrack(
   artistId: string,
-  accessToken: string
+  accessToken: string,
 ): Promise<string> {
   const url = `https://api.spotify.com/v1/artists/${artistId}/top-tracks`;
 
@@ -270,7 +274,7 @@ export async function getArtistTopTrack(
 
   try {
     const response = await fetch(url, {
-      method: 'GET',
+      method: "GET",
       headers,
     });
 
@@ -281,7 +285,7 @@ export async function getArtistTopTrack(
     const data = await response.json();
     return data.tracks[0].uri as string;
   } catch (error) {
-    console.error('Error getting artist top track:', error);
+    console.error("Error getting artist top track:", error);
     throw error;
   }
 }

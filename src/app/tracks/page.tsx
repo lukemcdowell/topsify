@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import PageHeader from '@/components/PageHeader';
-import Top50Grid from '@/components/Top50Grid';
-import TopTrack from '@/components/TopTrack';
-import TopTrackSkeleton from '@/components/TopTrackSkeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { TimeRangeType, TopTrackType } from '@/lib/types';
-import { AlertCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import PageHeader from "@/components/PageHeader";
+import Top50Grid from "@/components/Top50Grid";
+import TopTrack from "@/components/TopTrack";
+import TopTrackSkeleton from "@/components/TopTrackSkeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TimeRangeType, TopTrackType } from "@/lib/types";
+import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function TopTracks() {
   const [topLongTermTracks, setTopLongTermTracks] = useState([]);
   const [topMediumTermTracks, setTopMediumTermTracks] = useState([]);
   const [topShortTermTracks, setTopShortTermTracks] = useState([]);
   const [selectedTimeRange, setSelectedTimeRange] =
-    useState<TimeRangeType>('long_term');
+    useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -32,19 +32,19 @@ export default function TopTracks() {
     const fetchTopTracks = async (timeRange: string) => {
       try {
         const response = await fetch(
-          `/api/top?type=tracks&limit=50&timeRange=${timeRange}`
+          `/api/top?type=tracks&limit=50&timeRange=${timeRange}`,
         );
         const data = await response.json();
 
         if (response.ok) {
           switch (timeRange) {
-            case 'long_term':
+            case "long_term":
               setTopLongTermTracks(data);
               break;
-            case 'medium_term':
+            case "medium_term":
               setTopMediumTermTracks(data);
               break;
-            case 'short_term':
+            case "short_term":
               setTopShortTermTracks(data);
               break;
           }
@@ -57,11 +57,11 @@ export default function TopTracks() {
       }
     };
 
-    fetchTopTracks('long_term');
+    fetchTopTracks("long_term");
     setLoading(false);
 
-    fetchTopTracks('medium_term');
-    fetchTopTracks('short_term');
+    fetchTopTracks("medium_term");
+    fetchTopTracks("short_term");
   }, []);
 
   if (error)
@@ -93,7 +93,7 @@ export default function TopTracks() {
           : topTracks[selectedTimeRange].map(
               (trackData: TopTrackType, index) => (
                 <TopTrack key={index} index={index} trackData={trackData} />
-              )
+              ),
             )}
       </Top50Grid>
     </div>

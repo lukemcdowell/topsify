@@ -1,30 +1,30 @@
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from './ui/button';
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from './ui/card';
+} from "./ui/card";
 
 interface Top5CardProps {
-  itemType: 'tracks' | 'artists';
+  itemType: "tracks" | "artists";
   children: React.ReactNode;
 }
 
 function Top5Card({ itemType, children }: Top5CardProps) {
   const itemTypeMapping = {
     tracks: {
-      title: 'Tracks',
-      description: 'Your top 5 tracks',
-      buttonText: 'View all tracks',
+      title: "Tracks",
+      description: "Your top 5 tracks",
+      buttonText: "View all tracks",
     },
     artists: {
-      title: 'Artists',
-      description: 'Your top 5 artists',
-      buttonText: 'View all artists',
+      title: "Artists",
+      description: "Your top 5 artists",
+      buttonText: "View all artists",
     },
   };
   const cardText = itemTypeMapping[itemType];

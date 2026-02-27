@@ -1,22 +1,22 @@
-import { ExternalLink, Loader2, Plus } from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Button } from './ui/button';
+import { ExternalLink, Loader2, Plus } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from './ui/dialog';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Switch } from './ui/switch';
+} from "./ui/dialog";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Switch } from "./ui/switch";
 
 interface CreatePlaylistProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (isOpen: boolean) => void;
-  selected: 'tracks' | 'artists';
+  selected: "tracks" | "artists";
   trackUris?: string[];
   artistUris?: string[];
   defaultPlaylistName: string;
@@ -30,30 +30,30 @@ function CreatePlaylist({
   artistUris,
   defaultPlaylistName,
 }: CreatePlaylistProps) {
-  const [playlistName, setPlaylistName] = useState('');
+  const [playlistName, setPlaylistName] = useState("");
   const [publicPlaylist, setPublicPlaylist] = useState(false);
   const [loading, setLoading] = useState(false);
   const [playlistCreated, setPlaylistCreated] = useState(false);
-  const [playlistId, setPlaylistId] = useState('');
+  const [playlistId, setPlaylistId] = useState("");
 
   const handleCreatePlaylist = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/createPlaylist', {
-        method: 'POST',
+      const response = await fetch("/api/createPlaylist", {
+        method: "POST",
         body: JSON.stringify({
           type: selected,
           playlistName: playlistName || defaultPlaylistName,
           publicPlaylist: publicPlaylist,
-          uris: selected === 'tracks' ? trackUris : artistUris,
+          uris: selected === "tracks" ? trackUris : artistUris,
         }),
       });
 
       if (response.ok) {
-        console.log('Playlist created successfully!');
+        console.log("Playlist created successfully!");
         setPlaylistId((await response.json()).playlistId);
       } else {
-        console.error('Failed to create playlist');
+        console.error("Failed to create playlist");
       }
     } catch (error) {
       console.error(error);
@@ -65,8 +65,8 @@ function CreatePlaylist({
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
     setPlaylistCreated(false);
-    setPlaylistId('');
-    setPlaylistName('');
+    setPlaylistId("");
+    setPlaylistName("");
     setPublicPlaylist(false);
   };
 
@@ -111,10 +111,10 @@ function CreatePlaylist({
           </DialogTitle>
           <DialogDescription>
             {playlistCreated
-              ? 'Playlist created successfully!'
-              : selected === 'tracks'
-              ? 'Make a playlist from your favourite tracks.'
-              : "Make a playlist from your favourite artist's top tracks."}
+              ? "Playlist created successfully!"
+              : selected === "tracks"
+                ? "Make a playlist from your favourite tracks."
+                : "Make a playlist from your favourite artist's top tracks."}
           </DialogDescription>
         </DialogHeader>
 

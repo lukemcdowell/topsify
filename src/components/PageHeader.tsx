@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   DropdownMenu,
@@ -6,25 +6,25 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { TimeRangeType } from '@/lib/types';
-import { ChevronDown, Info, Plus } from 'lucide-react';
-import { useState } from 'react';
-import CreatePlaylist from './CreatePlaylist';
-import Information from './Information';
-import Navigation from './Navigation';
-import { Button } from './ui/button';
+} from "@/components/ui/tooltip";
+import { TimeRangeType } from "@/lib/types";
+import { ChevronDown, Info, Plus } from "lucide-react";
+import { useState } from "react";
+import CreatePlaylist from "./CreatePlaylist";
+import Information from "./Information";
+import Navigation from "./Navigation";
+import { Button } from "./ui/button";
 
 interface PageHeaderProps {
   timeRange: TimeRangeType;
   setTimeRange: (newTimeRange: TimeRangeType) => void;
-  selected: 'tracks' | 'artists';
+  selected: "tracks" | "artists";
   trackUris?: string[];
   artistUris?: string[];
 }
@@ -37,13 +37,13 @@ export default function PageHeader({
   artistUris,
 }: PageHeaderProps) {
   const timeRangeMapping = {
-    short_term: 'Short-term',
-    medium_term: 'Medium-term',
-    long_term: 'Long-term',
+    short_term: "Short-term",
+    medium_term: "Medium-term",
+    long_term: "Long-term",
   };
   const defaultPlaylistName = `My ${timeRangeMapping[
     timeRange
-  ].toLowerCase()} top ${selected === 'tracks' ? 'tracks' : 'artists'}`;
+  ].toLowerCase()} top ${selected === "tracks" ? "tracks" : "artists"}`;
   const [isPlaylistDialogOpen, setIsPlaylistDialogOpen] = useState(false);
   const [isInfoDialogOpen, setIsInfoDialogOpen] = useState(false);
 
@@ -83,13 +83,13 @@ export default function PageHeader({
                 onValueChange={(value) => setTimeRange(value as TimeRangeType)}
               >
                 <DropdownMenuRadioItem value="short_term">
-                  {timeRangeMapping['short_term']}
+                  {timeRangeMapping["short_term"]}
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="medium_term">
-                  {timeRangeMapping['medium_term']}
+                  {timeRangeMapping["medium_term"]}
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="long_term">
-                  {timeRangeMapping['long_term']}
+                  {timeRangeMapping["long_term"]}
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>

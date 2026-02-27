@@ -4,8 +4,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
+} from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface InformationProps {
   isOpen: boolean;
@@ -36,7 +36,7 @@ export default function Information({ isOpen, setIsOpen }: InformationProps) {
               4 weeks
             </li>
             <li>
-              <span className="text-primary font-medium">Medium Term:</span>{' '}
+              <span className="text-primary font-medium">Medium Term:</span>{" "}
               Last 6 months
             </li>
             <li>
@@ -51,7 +51,7 @@ export default function Information({ isOpen, setIsOpen }: InformationProps) {
         </div>
         <Separator />
         <div className="text-center sm:text-right">
-          Developed by{' '}
+          Developed by{" "}
           <a
             href="https://lukemcdowell.github.io/"
             target="_blank"

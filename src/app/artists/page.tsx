@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import PageHeader from '@/components/PageHeader';
-import Top50Grid from '@/components/Top50Grid';
-import TopArtist from '@/components/TopArtist';
-import TopArtistSkeleton from '@/components/TopArtistSkeleton';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { TimeRangeType, TopArtistType } from '@/lib/types';
-import { AlertCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import PageHeader from "@/components/PageHeader";
+import Top50Grid from "@/components/Top50Grid";
+import TopArtist from "@/components/TopArtist";
+import TopArtistSkeleton from "@/components/TopArtistSkeleton";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { TimeRangeType, TopArtistType } from "@/lib/types";
+import { AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function TopTracks() {
   const [topLongTermArtists, setTopLongTermArtists] = useState([]);
   const [topMediumTermArtists, setTopMediumTermArtists] = useState([]);
   const [topShortTermArtists, setTopShortTermArtists] = useState([]);
   const [selectedTimeRange, setSelectedTimeRange] =
-    useState<TimeRangeType>('long_term');
+    useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -32,19 +32,19 @@ export default function TopTracks() {
     const fetchTopArtists = async (timeRange: string) => {
       try {
         const response = await fetch(
-          `/api/top?type=artists&limit=50&timeRange=${timeRange}`
+          `/api/top?type=artists&limit=50&timeRange=${timeRange}`,
         );
         const data = await response.json();
 
         if (response.ok) {
           switch (timeRange) {
-            case 'long_term':
+            case "long_term":
               setTopLongTermArtists(data);
               break;
-            case 'medium_term':
+            case "medium_term":
               setTopMediumTermArtists(data);
               break;
-            case 'short_term':
+            case "short_term":
               setTopShortTermArtists(data);
               break;
           }
@@ -57,11 +57,11 @@ export default function TopTracks() {
       }
     };
 
-    fetchTopArtists('long_term');
+    fetchTopArtists("long_term");
     setLoading(false);
 
-    fetchTopArtists('medium_term');
-    fetchTopArtists('short_term');
+    fetchTopArtists("medium_term");
+    fetchTopArtists("short_term");
   }, []);
 
   if (error)
@@ -93,7 +93,7 @@ export default function TopTracks() {
           : topArtists[selectedTimeRange].map(
               (artistData: TopArtistType, index) => (
                 <TopArtist key={index} index={index} artistData={artistData} />
-              )
+              ),
             )}
       </Top50Grid>
     </div>

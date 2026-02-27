@@ -1,15 +1,15 @@
-import { TopTrackType } from '@/lib/types';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { Card } from './ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { TopTrackType } from "@/lib/types";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { Card } from "./ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from './ui/tooltip';
+} from "./ui/tooltip";
 
 interface TopTrackProps {
   index: number;
@@ -19,7 +19,7 @@ interface TopTrackProps {
 function TopTrack({ index, trackData }: TopTrackProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const artistList = trackData.artists.map((artist) => artist.name).join(', ');
+  const artistList = trackData.artists.map((artist) => artist.name).join(", ");
   const trackLink = trackData.external_urls.spotify;
   const albumLink = trackData.album.external_urls.spotify;
 
@@ -34,7 +34,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
           >
             {artist.name}
           </Link>
-          <span>{index === trackData.artists.length - 1 ? '' : `, `}</span>
+          <span>{index === trackData.artists.length - 1 ? "" : `, `}</span>
         </div>
       ))}
     </div>
