@@ -9,7 +9,7 @@ import { TimeRangeType, TopArtistType } from "@/lib/types";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function TopTracks() {
+export default function ArtistsClient() {
   const [topLongTermArtists, setTopLongTermArtists] = useState([]);
   const [topMediumTermArtists, setTopMediumTermArtists] = useState([]);
   const [topShortTermArtists, setTopShortTermArtists] = useState([]);

@@ -19,7 +19,7 @@ function Navigation({ selected }: NavigationProps) {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/tracks" legacyBehavior passHref>
+            <Link href="/dashboard/tracks" legacyBehavior passHref>
               <NavigationMenuLink
                 className={cn(
                   navigationMenuTriggerStyle(),
@@ -32,7 +32,7 @@ function Navigation({ selected }: NavigationProps) {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/artists" legacyBehavior passHref>
+            <Link href="/dashboard/artists" legacyBehavior passHref>
               <NavigationMenuLink
                 className={cn(
                   navigationMenuTriggerStyle(),

@@ -1,3 +1,4 @@
+import { COOKIE_NAMES } from "@/lib/cookies";
 import { getTopArtists, getTopTracks } from "@/lib/spotifyApi";
 import { promises as fs } from "fs";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,7 +16,7 @@ async function loadMockData(type: string) {
 }
 
 export async function GET(request: NextRequest) {
-  const accessToken = request.cookies.get("access_token")?.value;
+  const accessToken = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
   const type = request.nextUrl.searchParams.get("type");
   const limit = request.nextUrl.searchParams.get("limit");
   const timeRange = request.nextUrl.searchParams.get("timeRange");

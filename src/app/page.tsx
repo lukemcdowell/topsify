@@ -1,89 +1,48 @@
-"use client";
+import { Button } from "@/components/ui/button";
+import { CircleUserRound, Disc3, ListMusic } from "lucide-react";
+import Link from "next/link";
 
-import Top5Card from "@/components/Top5Card";
-import TopArtist from "@/components/TopArtist";
-import TopArtistSkeleton from "@/components/TopArtistSkeleton";
-import TopTrack from "@/components/TopTrack";
-import TopTrackSkeleton from "@/components/TopTrackSkeleton";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { TopArtistType, TopTrackType } from "@/lib/types";
-import { AlertCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-
-export default function TopTracks() {
-  const [topTracks, setTopTracks] = useState([]);
-  const [topArtists, setTopArtists] = useState([]);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTopData = async () => {
-      try {
-        const [tracksResponse, artistsResponse] = await Promise.all([
-          fetch(`/api/top?type=tracks&limit=5&timeRange=long_term`),
-          fetch(`/api/top?type=artists&limit=5&timeRange=long_term`),
-        ]);
-
-        const [tracksData, artistsData] = await Promise.all([
-          tracksResponse.json(),
-          artistsResponse.json(),
-        ]);
-
-        if (tracksResponse.ok && artistsResponse.ok) {
-          setTopTracks(tracksData);
-          setTopArtists(artistsData);
-        } else {
-          setError(true);
-        }
-      } catch (error) {
-        setError(true);
-        console.error(error);
-      }
-
-      setLoading(false);
-    };
-
-    fetchTopData();
-  }, []);
-
-  if (error)
-    return (
-      <Alert variant="destructive" className="mt-4">
-        <AlertCircle className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          An error occurred while fetching your top tracks and artists. Please
-          try again later.
-        </AlertDescription>
-      </Alert>
-    );
-
+export default function Home() {
   return (
-    <div className="flex flex-col pt-4 items-center h-full">
-      <div className="flex flex-col gap-2 pb-2">
-        <p className="scroll-m-20 text-xl font-semibold tracking-tight text-center px-5 sm:px-0 pb-2">
-          Your top tracks and artists, all in one place
+    <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-background">
+      <div className="flex flex-col items-center gap-6 max-w-md w-full text-center">
+        <h1 className="scroll-m-20 text-7xl font-extrabold tracking-tight">
+          Top
+          <span className="bg-gradient-to-r from-white to-primary bg-clip-text text-transparent">
+            s
+          </span>
+          <span className="text-primary">ify</span>
+        </h1>
+
+        <p className="text-lg text-muted-foreground leading-relaxed">
+          Discover your top tracks and artists from Spotify, and turn them into
+          playlists.
         </p>
-      </div>
-      <div className="grid gap-2 sm:gap-16 grid-cols-1 sm:grid-cols-2 pb-5">
-        <Top5Card itemType="tracks">
-          {loading
-            ? Array.from({ length: 5 }).map((_, index) => (
-                <TopTrackSkeleton key={index} />
-              ))
-            : topTracks.map((trackData: TopTrackType, index) => (
-                <TopTrack key={index} index={index} trackData={trackData} />
-              ))}
-        </Top5Card>
-        <Top5Card itemType="artists">
-          {loading
-            ? Array.from({ length: 5 }).map((_, index) => (
-                <TopArtistSkeleton key={index} />
-              ))
-            : topArtists.map((artistData: TopArtistType, index) => (
-                <TopArtist key={index} index={index} artistData={artistData} />
-              ))}
-        </Top5Card>
+
+        <Button asChild size="lg" className="mt-2 w-full sm:w-auto px-10">
+          <Link href="/api/login">Continue with Spotify</Link>
+        </Button>
+
+        <div className="grid grid-cols-3 gap-3 mt-6 w-full">
+          <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card">
+            <Disc3 className="text-primary h-5 w-5" />
+            <span className="text-xs font-medium text-muted-foreground">
+              Top Tracks
+            </span>
+          </div>
+          <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card">
+            <CircleUserRound className="text-primary h-5 w-5" />
+            <span className="text-xs font-medium text-muted-foreground">
+              Top Artists
+            </span>
+          </div>
+          <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card">
+            <ListMusic className="text-primary h-5 w-5" />
+            <span className="text-xs font-medium text-muted-foreground">
+              Playlists
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

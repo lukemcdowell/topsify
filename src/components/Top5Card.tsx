@@ -38,7 +38,7 @@ function Top5Card({ itemType, children }: Top5CardProps) {
             <CardDescription>{cardText.description}</CardDescription>
           </div>
           <Button asChild>
-            <Link href={itemType}>
+            <Link href={`/dashboard/${itemType}`}>
               View all <ChevronRight />
             </Link>
           </Button>

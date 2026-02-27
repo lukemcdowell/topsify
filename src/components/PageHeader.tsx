@@ -14,7 +14,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TimeRangeType } from "@/lib/types";
-import { ChevronDown, Info, Plus } from "lucide-react";
+import { ChevronDown, Info, LogOut, Plus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import CreatePlaylist from "./CreatePlaylist";
 import Information from "./Information";
@@ -68,6 +69,18 @@ export default function PageHeader({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>About & How to Use</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" aria-label="Log out" asChild>
+                  <Link href="/api/logout">
+                    <LogOut />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Log out</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <DropdownMenu>

@@ -1,3 +1,4 @@
+import { COOKIE_NAMES } from "@/lib/cookies";
 import { requestAccessToken } from "@/lib/spotifyApi";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -5,7 +6,7 @@ export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
   const state = request.nextUrl.searchParams.get("state");
 
-  const storedState = request.cookies.get("state")?.value;
+  const storedState = request.cookies.get(COOKIE_NAMES.STATE)?.value;
 
   if (state === null || state !== storedState) {
     return new NextResponse("Error: CSRF state mismatch", { status: 500 });
@@ -17,14 +18,14 @@ export async function GET(request: NextRequest) {
   try {
     const [accessToken, refreshToken] = await requestAccessToken(code);
 
-    const response = NextResponse.redirect(new URL("/", request.url));
-    response.cookies.delete("state");
-    response.cookies.set("access_token", accessToken, {
+    const response = NextResponse.redirect(new URL("/dashboard", request.url));
+    response.cookies.delete(COOKIE_NAMES.STATE);
+    response.cookies.set(COOKIE_NAMES.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 3600,
     });
-    response.cookies.set("refresh_token", refreshToken, {
+    response.cookies.set(COOKIE_NAMES.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
