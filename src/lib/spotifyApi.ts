@@ -189,18 +189,38 @@ export async function getTopArtists(
   return fetchTopItems<TopArtistType>("artists", timeRange, limit, accessToken);
 }
 
+const timeRangeDescriptions: Record<string, Record<string, string>> = {
+  tracks: {
+    short_term: "My top songs in the last 4 weeks",
+    medium_term: "My top songs in the last 6 months",
+    long_term: "My top songs of all time",
+  },
+  artists: {
+    short_term: "Top tracks from my favourite artists in the last 4 weeks",
+    medium_term: "Top tracks from my favourite artists in the last 6 months",
+    long_term: "Top tracks from my favourite artists of all time",
+  },
+};
+
 // create a new playlist on the user's account
 export async function createPlaylist(
   userId: string,
   playlistName: string,
   publicPlaylist: boolean,
   accessToken: string,
+  timeRange?: string,
+  type?: string,
 ): Promise<string> {
-  const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
+  const url = `https://api.spotify.com/v1/me/playlists`;
+  const timeRangeDescription =
+    timeRange && type ? timeRangeDescriptions[type]?.[timeRange] : null;
+  const description = timeRangeDescription
+    ? `${timeRangeDescription}. Created with Topsify: https://topsify.vercel.app`
+    : "Created with Topsify: https://topsify.vercel.app";
   const body = JSON.stringify({
     name: playlistName,
     public: publicPlaylist,
-    description: "Created with Topsify: https://topsify.vercel.app",
+    description,
   });
 
   const headers = {

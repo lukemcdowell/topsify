@@ -1,3 +1,4 @@
+import { TimeRangeType } from "@/lib/types";
 import { ExternalLink, Loader2, Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -17,6 +18,7 @@ interface CreatePlaylistProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (isOpen: boolean) => void;
   selected: "tracks" | "artists";
+  timeRange: TimeRangeType;
   trackUris?: string[];
   artistUris?: string[];
   defaultPlaylistName: string;
@@ -26,6 +28,7 @@ function CreatePlaylist({
   isDialogOpen,
   setIsDialogOpen,
   selected,
+  timeRange,
   trackUris,
   artistUris,
   defaultPlaylistName,
@@ -46,6 +49,7 @@ function CreatePlaylist({
           playlistName: playlistName || defaultPlaylistName,
           publicPlaylist: publicPlaylist,
           uris: selected === "tracks" ? trackUris : artistUris,
+          timeRange,
         }),
       });
 

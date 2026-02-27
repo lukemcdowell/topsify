@@ -52,6 +52,7 @@ export default function PageHeader({
         isDialogOpen={isPlaylistDialogOpen}
         setIsDialogOpen={setIsPlaylistDialogOpen}
         selected={selected}
+        timeRange={timeRange}
         trackUris={trackUris}
         artistUris={artistUris}
         defaultPlaylistName={defaultPlaylistName}

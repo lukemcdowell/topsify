@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const accessToken = request.cookies.get("access_token")?.value;
-  const { type, playlistName, publicPlaylist, uris } = await request.json();
+  const { type, playlistName, publicPlaylist, uris, timeRange } = await request.json();
 
   if (!accessToken) {
     return NextResponse.redirect(new URL("/api/login", request.url));
@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
       playlistName,
       publicPlaylist,
       accessToken,
+      timeRange,
+      type,
     );
 
     let trackUris: string[] = [];
