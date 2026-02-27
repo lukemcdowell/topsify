@@ -31,29 +31,46 @@ Setting `MOCK=true` bypasses Spotify auth and serves data from `src/mock/`.
 
 **Auth flow (Spotify OAuth 2.0):**
 
-1. Unauthenticated users hit `/` → middleware redirects to `/continue`
+1. Unauthenticated users hit `/` — a public login landing page
 2. User clicks "Continue with Spotify" → hits `/api/login` → redirects to Spotify
-3. Spotify redirects to `/api/callback` → tokens stored as httpOnly cookies (`access_token`, `refresh_token`)
-4. On subsequent visits, middleware checks for `access_token`; if missing but `refresh_token` exists, redirects to `/api/refresh`
-5. The middleware runs on `/`, `/tracks`, and `/artists` (see `matcher` in `src/middleware.ts`)
-6. If refresh fails or no tokens exist, user is redirected to `/continue`
+3. Spotify redirects to `/api/callback` → tokens stored as httpOnly cookies (`access_token`, `refresh_token`) → redirects to `/dashboard`
+4. The middleware (`src/proxy.ts`) runs on `/`, `/dashboard`, `/dashboard/tracks`, and `/dashboard/artists`:
+   - `/dashboard` without a `refresh_token` cookie → redirects to `/`
+   - `/` with a `refresh_token` cookie → redirects to `/dashboard`
+5. Each authenticated page (server component) calls `getValidAccessToken()` from `src/lib/auth.ts` as a fine-grained auth guard:
+   - Has `access_token` → returns it and renders the page
+   - No `access_token` but has `refresh_token` → redirects to `/api/refresh?redirect=/dashboard`
+   - No tokens → redirects to `/`
+6. `GET /api/refresh` refreshes the `access_token`, then redirects to the `?redirect=` param (defaults to `/dashboard`)
+7. If refresh fails or no tokens exist, user is redirected to `/`
+
+**Cookie names** are centralised in `src/lib/cookies.ts` (`COOKIE_NAMES`). All API routes and auth helpers import from there.
 
 **API routes** (`src/app/api/`):
 
 - `GET /api/login` — initiates OAuth, sets CSRF `state` cookie
-- `GET /api/callback` — validates state, exchanges code for tokens
-- `GET /api/refresh` — refreshes `access_token` using `refresh_token`
+- `GET /api/callback` — validates state, exchanges code for tokens, redirects to `/dashboard`
+- `GET /api/refresh?redirect=<path>` — refreshes `access_token` using `refresh_token`, redirects to `redirect` param
+- `GET /api/logout` — clears `access_token` and `refresh_token` cookies, redirects to `/`
 - `GET /api/top?type=tracks|artists&limit=N&timeRange=long_term|medium_term|short_term` — fetches top items; uses mock data if `MOCK=true`
 - `POST /api/createPlaylist` — creates a Spotify playlist from supplied URIs; for `type=artists`, resolves each artist's top track URI first
 
 **Pages:**
 
-- `/` — dashboard showing top 5 tracks and top 5 artists (long_term only)
-- `/tracks` — top 50 tracks with time range selector and playlist creation
-- `/artists` — top 50 artists with time range selector and playlist creation
-- `/continue` — unauthenticated landing page
+- `/` — public login landing page (unauthenticated)
+- `/dashboard` — top 5 tracks and top 5 artists overview (authenticated)
+- `/dashboard/tracks` — top 50 tracks with time range selector and playlist creation (authenticated)
+- `/dashboard/artists` — top 50 artists with time range selector and playlist creation (authenticated)
 
-**Data flow on `/tracks` and `/artists`:** All three time ranges (`long_term`, `medium_term`, `short_term`) are fetched in parallel on mount; only `long_term` blocks the loading state. The selected time range switches the displayed data client-side without re-fetching.
+**Page structure:** Each authenticated page is split into two files:
+- `page.tsx` — async server component, calls `getValidAccessToken()` as auth guard, renders the client component
+- `*Client.tsx` — `"use client"` component containing all state, data fetching, and rendering logic (e.g. `DashboardClient.tsx`, `TracksClient.tsx`, `ArtistsClient.tsx`)
+
+**Layouts:**
+- `src/app/layout.tsx` — root layout, minimal html/body wrapper with Inter font and dark mode
+- `src/app/dashboard/layout.tsx` — dashboard layout, renders the Topsify logo header and wraps all `/dashboard/*` pages
+
+**Data flow on `/dashboard/tracks` and `/dashboard/artists`:** All three time ranges (`long_term`, `medium_term`, `short_term`) are fetched in parallel on mount; only `long_term` blocks the loading state. The selected time range switches the displayed data client-side without re-fetching.
 
 **Spotify API wrapper** (`src/lib/spotifyApi.ts`): All direct Spotify API calls live here. Uses `getEnvVariable()` from `src/lib/utils.ts` which throws at startup if any required env var is missing.
 

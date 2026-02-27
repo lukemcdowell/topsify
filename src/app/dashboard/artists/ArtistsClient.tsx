@@ -9,27 +9,28 @@ import { TimeRangeType, TopArtistType } from "@/lib/types";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const TIME_RANGES: TimeRangeType[] = ["long_term", "medium_term", "short_term"];
+
 export default function ArtistsClient() {
-  const [topLongTermArtists, setTopLongTermArtists] = useState([]);
-  const [topMediumTermArtists, setTopMediumTermArtists] = useState([]);
-  const [topShortTermArtists, setTopShortTermArtists] = useState([]);
+  const [artists, setArtists] = useState<Record<TimeRangeType, TopArtistType[]>>(
+    {
+      long_term: [],
+      medium_term: [],
+      short_term: [],
+    },
+  );
+  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(
+    new Set(),
+  );
   const [selectedTimeRange, setSelectedTimeRange] =
     useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  const topArtists = {
-    long_term: topLongTermArtists,
-    medium_term: topMediumTermArtists,
-    short_term: topShortTermArtists,
-  };
-
-  const getArtistUris = (artists: TopArtistType[]) => {
-    return artists.map((artists) => artists.uri);
-  };
+  const getArtistUris = (artistList: TopArtistType[]) =>
+    artistList.map((a) => a.uri);
 
   useEffect(() => {
-    const fetchTopArtists = async (timeRange: string) => {
+    const fetchRange = async (timeRange: TimeRangeType) => {
       try {
         const response = await fetch(
           `/api/top?type=artists&limit=50&timeRange=${timeRange}`,
@@ -37,31 +38,17 @@ export default function ArtistsClient() {
         const data = await response.json();
 
         if (response.ok) {
-          switch (timeRange) {
-            case "long_term":
-              setTopLongTermArtists(data);
-              break;
-            case "medium_term":
-              setTopMediumTermArtists(data);
-              break;
-            case "short_term":
-              setTopShortTermArtists(data);
-              break;
-          }
+          setArtists((prev) => ({ ...prev, [timeRange]: data }));
+          setLoadedRanges((prev) => new Set(prev).add(timeRange));
         } else {
           setError(true);
         }
-      } catch (error) {
+      } catch {
         setError(true);
-        console.error(error);
       }
     };
 
-    fetchTopArtists("long_term");
-    setLoading(false);
-
-    fetchTopArtists("medium_term");
-    fetchTopArtists("short_term");
+    TIME_RANGES.forEach((r) => fetchRange(r));
   }, []);
 
   if (error)
@@ -76,25 +63,29 @@ export default function ArtistsClient() {
       </Alert>
     );
 
+  const isLoaded = loadedRanges.has(selectedTimeRange);
+
   return (
     <div className="flex flex-col justify-center items-center">
       <PageHeader
         timeRange={selectedTimeRange}
         setTimeRange={setSelectedTimeRange}
         selected="artists"
-        artistUris={getArtistUris(topArtists[selectedTimeRange])}
+        artistUris={getArtistUris(artists[selectedTimeRange])}
       />
 
       <Top50Grid>
-        {loading
-          ? Array.from({ length: 50 }).map((_, index) => (
-              <TopArtistSkeleton key={index} />
+        {isLoaded
+          ? artists[selectedTimeRange].map((artistData, index) => (
+              <TopArtist
+                key={artistData.uri}
+                index={index}
+                artistData={artistData}
+              />
             ))
-          : topArtists[selectedTimeRange].map(
-              (artistData: TopArtistType, index) => (
-                <TopArtist key={index} index={index} artistData={artistData} />
-              ),
-            )}
+          : Array.from({ length: 50 }).map((_, index) => (
+              <TopArtistSkeleton key={index} />
+            ))}
       </Top50Grid>
     </div>
   );

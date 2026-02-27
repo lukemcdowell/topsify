@@ -9,27 +9,26 @@ import { TimeRangeType, TopTrackType } from "@/lib/types";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const TIME_RANGES: TimeRangeType[] = ["long_term", "medium_term", "short_term"];
+
 export default function TracksClient() {
-  const [topLongTermTracks, setTopLongTermTracks] = useState([]);
-  const [topMediumTermTracks, setTopMediumTermTracks] = useState([]);
-  const [topShortTermTracks, setTopShortTermTracks] = useState([]);
+  const [tracks, setTracks] = useState<Record<TimeRangeType, TopTrackType[]>>({
+    long_term: [],
+    medium_term: [],
+    short_term: [],
+  });
+  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(
+    new Set(),
+  );
   const [selectedTimeRange, setSelectedTimeRange] =
     useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  const topTracks = {
-    long_term: topLongTermTracks,
-    medium_term: topMediumTermTracks,
-    short_term: topShortTermTracks,
-  };
-
-  const getTrackUris = (tracks: TopTrackType[]) => {
-    return tracks.map((track) => track.uri);
-  };
+  const getTrackUris = (trackList: TopTrackType[]) =>
+    trackList.map((t) => t.uri);
 
   useEffect(() => {
-    const fetchTopTracks = async (timeRange: string) => {
+    const fetchRange = async (timeRange: TimeRangeType) => {
       try {
         const response = await fetch(
           `/api/top?type=tracks&limit=50&timeRange=${timeRange}`,
@@ -37,31 +36,17 @@ export default function TracksClient() {
         const data = await response.json();
 
         if (response.ok) {
-          switch (timeRange) {
-            case "long_term":
-              setTopLongTermTracks(data);
-              break;
-            case "medium_term":
-              setTopMediumTermTracks(data);
-              break;
-            case "short_term":
-              setTopShortTermTracks(data);
-              break;
-          }
+          setTracks((prev) => ({ ...prev, [timeRange]: data }));
+          setLoadedRanges((prev) => new Set(prev).add(timeRange));
         } else {
           setError(true);
         }
-      } catch (error) {
+      } catch {
         setError(true);
-        console.error(error);
       }
     };
 
-    fetchTopTracks("long_term");
-    setLoading(false);
-
-    fetchTopTracks("medium_term");
-    fetchTopTracks("short_term");
+    TIME_RANGES.forEach((r) => fetchRange(r));
   }, []);
 
   if (error)
@@ -76,25 +61,25 @@ export default function TracksClient() {
       </Alert>
     );
 
+  const isLoaded = loadedRanges.has(selectedTimeRange);
+
   return (
     <div className="flex flex-col justify-center items-center">
       <PageHeader
         timeRange={selectedTimeRange}
         setTimeRange={setSelectedTimeRange}
         selected="tracks"
-        trackUris={getTrackUris(topTracks[selectedTimeRange])}
+        trackUris={getTrackUris(tracks[selectedTimeRange])}
       />
 
       <Top50Grid>
-        {loading
-          ? Array.from({ length: 50 }).map((_, index) => (
-              <TopTrackSkeleton key={index} />
+        {isLoaded
+          ? tracks[selectedTimeRange].map((trackData, index) => (
+              <TopTrack key={trackData.uri} index={index} trackData={trackData} />
             ))
-          : topTracks[selectedTimeRange].map(
-              (trackData: TopTrackType, index) => (
-                <TopTrack key={index} index={index} trackData={trackData} />
-              ),
-            )}
+          : Array.from({ length: 50 }).map((_, index) => (
+              <TopTrackSkeleton key={index} />
+            ))}
       </Top50Grid>
     </div>
   );

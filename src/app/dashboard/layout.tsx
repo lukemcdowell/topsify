@@ -19,7 +19,7 @@ export default function DashboardLayout({
             </h1>
           </Link>
         </div>
-        <main className="container w-full h-full m-auto">{children}</main>
+        <main className="w-full">{children}</main>
       </div>
     </div>
   );
