@@ -73,7 +73,11 @@ export default function DashboardClient() {
                 <TopTrackSkeleton key={index} />
               ))
             : topTracks.map((trackData, index) => (
-                <TopTrack key={trackData.uri} index={index} trackData={trackData} />
+                <TopTrack
+                  key={trackData.uri}
+                  index={index}
+                  trackData={trackData}
+                />
               ))}
         </Top5Card>
         <Top5Card itemType="artists">
@@ -82,7 +86,11 @@ export default function DashboardClient() {
                 <TopArtistSkeleton key={index} />
               ))
             : topArtists.map((artistData, index) => (
-                <TopArtist key={artistData.uri} index={index} artistData={artistData} />
+                <TopArtist
+                  key={artistData.uri}
+                  index={index}
+                  artistData={artistData}
+                />
               ))}
         </Top5Card>
       </div>

@@ -12,13 +12,13 @@ import { useEffect, useState } from "react";
 const TIME_RANGES: TimeRangeType[] = ["long_term", "medium_term", "short_term"];
 
 export default function ArtistsClient() {
-  const [artists, setArtists] = useState<Record<TimeRangeType, TopArtistType[]>>(
-    {
-      long_term: [],
-      medium_term: [],
-      short_term: [],
-    },
-  );
+  const [artists, setArtists] = useState<
+    Record<TimeRangeType, TopArtistType[]>
+  >({
+    long_term: [],
+    medium_term: [],
+    short_term: [],
+  });
   const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(
     new Set(),
   );

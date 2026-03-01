@@ -12,8 +12,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  const raw = request.nextUrl.searchParams.get("redirect") || "/dashboard";
   const redirectTo =
-    request.nextUrl.searchParams.get("redirect") || "/dashboard";
+    raw.startsWith("/") && !raw.startsWith("//") ? raw : "/dashboard";
 
   try {
     const [accessToken, refreshToken] =
@@ -23,11 +24,12 @@ export async function GET(request: NextRequest) {
     response.cookies.set(COOKIE_NAMES.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 3600,
+      maxAge: 3600, // 1 hour
     });
     response.cookies.set(COOKIE_NAMES.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
     return response;

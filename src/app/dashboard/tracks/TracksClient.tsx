@@ -75,7 +75,11 @@ export default function TracksClient() {
       <Top50Grid>
         {isLoaded
           ? tracks[selectedTimeRange].map((trackData, index) => (
-              <TopTrack key={trackData.uri} index={index} trackData={trackData} />
+              <TopTrack
+                key={trackData.uri}
+                index={index}
+                trackData={trackData}
+              />
             ))
           : Array.from({ length: 50 }).map((_, index) => (
               <TopTrackSkeleton key={index} />

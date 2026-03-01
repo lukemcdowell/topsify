@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { CircleUserRound, Disc3, ListMusic } from "lucide-react";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -20,7 +19,7 @@ export default function Home() {
         </p>
 
         <Button asChild size="lg" className="mt-2 w-full sm:w-auto px-10">
-          <Link href="/api/login">Continue with Spotify</Link>
+          <a href="/api/login">Continue with Spotify</a>
         </Button>
 
         <div className="grid grid-cols-3 gap-3 mt-6 w-full">

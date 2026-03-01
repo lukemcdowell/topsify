@@ -37,6 +37,7 @@ function CreatePlaylist({
   const [publicPlaylist, setPublicPlaylist] = useState(false);
   const [loading, setLoading] = useState(false);
   const [playlistCreated, setPlaylistCreated] = useState(false);
+  const [playlistError, setPlaylistError] = useState(false);
   const [playlistId, setPlaylistId] = useState("");
 
   const handleCreatePlaylist = async () => {
@@ -44,6 +45,7 @@ function CreatePlaylist({
     try {
       const response = await fetch("/api/createPlaylist", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: selected,
           playlistName: playlistName || defaultPlaylistName,
@@ -54,21 +56,22 @@ function CreatePlaylist({
       });
 
       if (response.ok) {
-        console.log("Playlist created successfully!");
         setPlaylistId((await response.json()).playlistId);
+        setPlaylistCreated(true);
       } else {
-        console.error("Failed to create playlist");
+        setPlaylistError(true);
       }
     } catch (error) {
       console.error(error);
+      setPlaylistError(true);
     }
     setLoading(false);
-    setPlaylistCreated(true);
   };
 
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
     setPlaylistCreated(false);
+    setPlaylistError(false);
     setPlaylistId("");
     setPlaylistName("");
     setPublicPlaylist(false);
@@ -116,9 +119,11 @@ function CreatePlaylist({
           <DialogDescription>
             {playlistCreated
               ? "Playlist created successfully!"
-              : selected === "tracks"
-                ? "Make a playlist from your favourite tracks."
-                : "Make a playlist from your favourite artist's top tracks."}
+              : playlistError
+                ? "Something went wrong. Please try again."
+                : selected === "tracks"
+                  ? "Make a playlist from your favourite tracks."
+                  : "Make a playlist from your favourite artist's top tracks."}
           </DialogDescription>
         </DialogHeader>
 
@@ -131,6 +136,10 @@ function CreatePlaylist({
               Open in Spotify
             </Link>
             <ExternalLink />
+          </Button>
+        ) : playlistError ? (
+          <Button variant="outline" onClick={() => setPlaylistError(false)}>
+            Try again
           </Button>
         ) : (
           newPlaylistDetails

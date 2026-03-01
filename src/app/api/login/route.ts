@@ -10,6 +10,7 @@ export async function GET() {
   response.cookies.set(COOKIE_NAMES.STATE, state, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    maxAge: 300, // 5 minutes
   });
 
   return response;

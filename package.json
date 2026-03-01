@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "ng lint --fix",
+    "lint:fix": "next lint --fix",
     "prettier": "npx prettier --check .",
     "prettier:fix": "npx prettier --write ."
   },

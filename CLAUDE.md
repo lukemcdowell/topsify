@@ -63,10 +63,12 @@ Setting `MOCK=true` bypasses Spotify auth and serves data from `src/mock/`.
 - `/dashboard/artists` — top 50 artists with time range selector and playlist creation (authenticated)
 
 **Page structure:** Each authenticated page is split into two files:
+
 - `page.tsx` — async server component, calls `getValidAccessToken()` as auth guard, renders the client component
 - `*Client.tsx` — `"use client"` component containing all state, data fetching, and rendering logic (e.g. `DashboardClient.tsx`, `TracksClient.tsx`, `ArtistsClient.tsx`)
 
 **Layouts:**
+
 - `src/app/layout.tsx` — root layout, minimal html/body wrapper with Inter font and dark mode
 - `src/app/dashboard/layout.tsx` — dashboard layout, renders the Topsify logo header and wraps all `/dashboard/*` pages
 

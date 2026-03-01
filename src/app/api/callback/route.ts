@@ -9,10 +9,10 @@ export async function GET(request: NextRequest) {
   const storedState = request.cookies.get(COOKIE_NAMES.STATE)?.value;
 
   if (state === null || state !== storedState) {
-    return new NextResponse("Error: CSRF state mismatch", { status: 500 });
+    return new NextResponse("Error: CSRF state mismatch", { status: 403 });
   }
   if (!code) {
-    return new NextResponse("Error: no code in callback", { status: 500 });
+    return new NextResponse("Error: no code in callback", { status: 400 });
   }
 
   try {
@@ -23,11 +23,12 @@ export async function GET(request: NextRequest) {
     response.cookies.set(COOKIE_NAMES.ACCESS_TOKEN, accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 3600,
+      maxAge: 3600, // 1 hour
     });
     response.cookies.set(COOKIE_NAMES.REFRESH_TOKEN, refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
     });
 
     return response;

@@ -112,32 +112,6 @@ export async function requestRefreshedAccessToken(
   }
 }
 
-// get user id from spotify API
-export async function getUserId(accessToken: string): Promise<string> {
-  const url = "https://api.spotify.com/v1/me";
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error getting user details: ${response.statusText}`);
-    }
-
-    const details = await response.json();
-    return details.id;
-  } catch (error) {
-    console.error("Error getting user details:", error);
-    throw error;
-  }
-}
-
 // get top items from spotify API
 async function fetchTopItems<T>(
   itemType: TopItemType,
@@ -204,7 +178,6 @@ const timeRangeDescriptions: Record<string, Record<string, string>> = {
 
 // create a new playlist on the user's account
 export async function createPlaylist(
-  userId: string,
   playlistName: string,
   publicPlaylist: boolean,
   accessToken: string,

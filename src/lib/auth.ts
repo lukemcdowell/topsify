@@ -1,8 +1,10 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { COOKIE_NAMES } from './cookies';
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { COOKIE_NAMES } from "./cookies";
 
-export async function getValidAccessToken(): Promise<string> {
+export async function getValidAccessToken(
+  currentPath = "/dashboard",
+): Promise<string> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
 
@@ -13,8 +15,8 @@ export async function getValidAccessToken(): Promise<string> {
   const refreshToken = cookieStore.get(COOKIE_NAMES.REFRESH_TOKEN)?.value;
 
   if (!refreshToken) {
-    redirect('/');
+    redirect("/");
   }
 
-  redirect('/api/refresh?redirect=/dashboard');
+  redirect(`/api/refresh?redirect=${currentPath}`);
 }
