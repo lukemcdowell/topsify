@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/tooltip";
 import { TimeRangeType } from "@/lib/types";
 import { ChevronDown, Info, LogOut } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import Information from "./Information";
 import { Button } from "./ui/button";
@@ -88,9 +87,9 @@ export default function GlobalControls({
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" aria-label="Log out" asChild>
-                <Link href="/api/logout">
+                <a href="/api/logout">
                   <LogOut />
-                </Link>
+                </a>
               </Button>
             </TooltipTrigger>
             <TooltipContent>Log out</TooltipContent>
