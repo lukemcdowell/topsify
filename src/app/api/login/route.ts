@@ -10,6 +10,8 @@ export async function GET() {
   response.cookies.set(COOKIE_NAMES.STATE, state, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
     maxAge: 300, // 5 minutes
   });
 

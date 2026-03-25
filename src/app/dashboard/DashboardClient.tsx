@@ -66,7 +66,7 @@ export default function DashboardClient() {
       <div className="container w-full flex justify-end pt-4 sm:pt-2 pb-2 px-2 sm:px-0">
         <GlobalControls timeRange={timeRange} setTimeRange={setTimeRange} />
       </div>
-      <div className="w-full grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 pb-5 px-2 sm:px-0">
+      <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 pb-5 px-2 sm:px-0">
         <Top5Card itemType="tracks">
           {loading
             ? Array.from({ length: 5 }).map((_, index) => (
