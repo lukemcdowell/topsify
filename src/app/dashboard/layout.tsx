@@ -11,11 +11,8 @@ export default function DashboardLayout({
         <div className="w-full flex justify-center pt-5">
           <Link href="/dashboard">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Top
-              <span className="bg-gradient-to-r from-white to-primary bg-clip-text text-transparent">
-                s
-              </span>
-              <span className="text-primary">ify</span>
+              <span className="text-primary">topS</span>
+              ify
             </h1>
           </Link>
         </div>

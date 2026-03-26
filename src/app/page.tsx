@@ -6,16 +6,12 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-background">
       <div className="flex flex-col items-center gap-6 max-w-md w-full text-center">
         <h1 className="scroll-m-20 text-7xl font-extrabold tracking-tight">
-          Top
-          <span className="bg-gradient-to-r from-white to-primary bg-clip-text text-transparent">
-            s
-          </span>
-          <span className="text-primary">ify</span>
+          <span className="text-primary">topS</span>
+          ify
         </h1>
 
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Discover your top tracks and artists from Spotify, and turn them into
-          playlists.
+          Discover your top tracks and artists from Spotify.
         </p>
 
         <Button asChild size="lg" className="mt-2 w-full sm:w-auto px-10">
@@ -38,7 +34,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-2 p-4 rounded-xl border border-border bg-card">
             <ListMusic className="text-primary h-5 w-5" />
             <span className="text-xs font-medium text-muted-foreground">
-              Playlists
+              Genres
             </span>
           </div>
         </div>
