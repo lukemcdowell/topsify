@@ -19,30 +19,32 @@ function Navigation({ selected }: NavigationProps) {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link href="/dashboard/tracks" legacyBehavior passHref>
-              <NavigationMenuLink
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  selected === "tracks" && "border border-primary",
-                )}
-              >
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                selected === "tracks" && "border border-primary",
+              )}
+            >
+              <Link href="/dashboard/tracks">
                 <Disc3 className="pr-1" />
                 Tracks
-              </NavigationMenuLink>
-            </Link>
+              </Link>
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/dashboard/artists" legacyBehavior passHref>
-              <NavigationMenuLink
-                className={cn(
-                  navigationMenuTriggerStyle(),
-                  selected === "artists" && "border border-primary",
-                )}
-              >
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                selected === "artists" && "border border-primary",
+              )}
+            >
+              <Link href="/dashboard/artists">
                 <CircleUserRound className="pr-1" />
                 Artists
-              </NavigationMenuLink>
-            </Link>
+              </Link>
+            </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
