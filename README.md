@@ -14,11 +14,13 @@ View your top Spotify tracks and artists across different time ranges, and creat
 **Prerequisites:** Node.js, a [Spotify Developer app](https://developer.spotify.com/dashboard) with `http://127.0.0.1:3000/api/callback` added as a redirect URI.
 
 1. Clone the repo and install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Create `.env.local`:
+
    ```
    SPOTIFY_CLIENT_ID=your_client_id
    SPOTIFY_CLIENT_SECRET=your_client_secret
@@ -28,6 +30,7 @@ View your top Spotify tracks and artists across different time ranges, and creat
    > Tip: set `MOCK=true` to use mock data without a real Spotify connection.
 
 3. Start the dev server:
+
    ```bash
    npm run dev
    ```

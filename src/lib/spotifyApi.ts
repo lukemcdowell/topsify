@@ -163,17 +163,10 @@ export async function getTopArtists(
   return fetchTopItems<TopArtistType>("artists", timeRange, limit, accessToken);
 }
 
-const timeRangeDescriptions: Record<string, Record<string, string>> = {
-  tracks: {
-    short_term: "My top songs in the last 4 weeks",
-    medium_term: "My top songs in the last 6 months",
-    long_term: "My top songs of all time",
-  },
-  artists: {
-    short_term: "Top tracks from my favourite artists in the last 4 weeks",
-    medium_term: "Top tracks from my favourite artists in the last 6 months",
-    long_term: "Top tracks from my favourite artists of all time",
-  },
+const timeRangeDescriptions: Record<string, string> = {
+  short_term: "My top songs in the last 4 weeks",
+  medium_term: "My top songs in the last 6 months",
+  long_term: "My top songs of all time",
 };
 
 // create a new playlist on the user's account
@@ -182,11 +175,11 @@ export async function createPlaylist(
   publicPlaylist: boolean,
   accessToken: string,
   timeRange?: string,
-  type?: string,
 ): Promise<string> {
   const url = `https://api.spotify.com/v1/me/playlists`;
-  const timeRangeDescription =
-    timeRange && type ? timeRangeDescriptions[type]?.[timeRange] : null;
+  const timeRangeDescription = timeRange
+    ? timeRangeDescriptions[timeRange]
+    : null;
   const description = timeRangeDescription
     ? `${timeRangeDescription}. Created with Topsify: https://topsify.vercel.app`
     : "Created with Topsify: https://topsify.vercel.app";
@@ -250,35 +243,6 @@ export async function addTracksToPlaylist(
     }
   } catch (error) {
     console.error("Error adding tracks to playlist:", error);
-    throw error;
-  }
-}
-
-// get an artists top track
-export async function getArtistTopTrack(
-  artistId: string,
-  accessToken: string,
-): Promise<string> {
-  const url = `https://api.spotify.com/v1/artists/${artistId}/top-tracks`;
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error getting artist top track: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data.tracks[0].uri as string;
-  } catch (error) {
-    console.error("Error getting artist top track:", error);
     throw error;
   }
 }

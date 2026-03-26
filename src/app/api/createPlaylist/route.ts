@@ -1,13 +1,9 @@
-import {
-  addTracksToPlaylist,
-  createPlaylist,
-  getArtistTopTrack,
-} from "@/lib/spotifyApi";
+import { addTracksToPlaylist, createPlaylist } from "@/lib/spotifyApi";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const accessToken = request.cookies.get("access_token")?.value;
-  const { type, playlistName, publicPlaylist, uris, timeRange } =
+  const { playlistName, publicPlaylist, uris, timeRange } =
     await request.json();
 
   if (!accessToken) {
@@ -32,21 +28,9 @@ export async function POST(request: NextRequest) {
       publicPlaylist,
       accessToken,
       timeRange,
-      type,
     );
 
-    let trackUris: string[] = [];
-    if (type == "artists") {
-      for (const uri of uris) {
-        const artistId = uri.split(":")[2];
-        const trackUri = await getArtistTopTrack(artistId, accessToken);
-        trackUris.push(trackUri);
-      }
-    } else {
-      trackUris = uris;
-    }
-
-    await addTracksToPlaylist(playlistId, trackUris, accessToken);
+    await addTracksToPlaylist(playlistId, uris, accessToken);
     return new NextResponse(JSON.stringify({ playlistId }), { status: 201 });
   } catch (error) {
     console.error("Error creating playlist:", error);

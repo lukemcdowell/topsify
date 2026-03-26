@@ -17,20 +17,16 @@ import { Switch } from "./ui/switch";
 interface CreatePlaylistProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (isOpen: boolean) => void;
-  selected: "tracks" | "artists";
   timeRange: TimeRangeType;
   trackUris?: string[];
-  artistUris?: string[];
   defaultPlaylistName: string;
 }
 
 function CreatePlaylist({
   isDialogOpen,
   setIsDialogOpen,
-  selected,
   timeRange,
   trackUris,
-  artistUris,
   defaultPlaylistName,
 }: CreatePlaylistProps) {
   const [playlistName, setPlaylistName] = useState("");
@@ -47,10 +43,10 @@ function CreatePlaylist({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: selected,
+          type: "tracks",
           playlistName: playlistName || defaultPlaylistName,
           publicPlaylist: publicPlaylist,
-          uris: selected === "tracks" ? trackUris : artistUris,
+          uris: trackUris,
           timeRange,
         }),
       });
@@ -121,9 +117,7 @@ function CreatePlaylist({
               ? "Playlist created successfully!"
               : playlistError
                 ? "Something went wrong. Please try again."
-                : selected === "tracks"
-                  ? "Make a playlist from your favourite tracks."
-                  : "Make a playlist from your favourite artist's top tracks."}
+                : "Make a playlist from your favourite tracks."}
           </DialogDescription>
         </DialogHeader>
 

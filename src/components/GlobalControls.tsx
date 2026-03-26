@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TimeRangeType } from "@/lib/types";
-import { ChevronDown, Info, LogOut } from "lucide-react";
+import { ChevronDown, Info, ListPlus, LogOut } from "lucide-react";
 import { useState } from "react";
 import Information from "./Information";
 import { Button } from "./ui/button";
@@ -22,7 +22,7 @@ import { Button } from "./ui/button";
 interface GlobalControlsProps {
   timeRange: TimeRangeType;
   setTimeRange: (range: TimeRangeType) => void;
-  children?: React.ReactNode;
+  onCreatePlaylist?: () => void;
 }
 
 const timeRangeMapping: Record<TimeRangeType, string> = {
@@ -34,13 +34,19 @@ const timeRangeMapping: Record<TimeRangeType, string> = {
 export default function GlobalControls({
   timeRange,
   setTimeRange,
-  children,
+  onCreatePlaylist,
 }: GlobalControlsProps) {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   return (
     <>
       <div className="flex gap-2 justify-center items-center w-full sm:w-auto px-2 sm:px-0">
+        {onCreatePlaylist && (
+          <Button onClick={onCreatePlaylist} aria-label="Create playlist">
+            <span className="hidden sm:inline">Create playlist</span>
+            <ListPlus />
+          </Button>
+        )}
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
@@ -65,8 +71,6 @@ export default function GlobalControls({
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {children}
 
         <TooltipProvider delayDuration={0}>
           <Tooltip>

@@ -26,9 +26,6 @@ export default function ArtistsClient() {
     useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
 
-  const getArtistUris = (artistList: TopArtistType[]) =>
-    artistList.map((a) => a.uri);
-
   useEffect(() => {
     const fetchRange = async (timeRange: TimeRangeType) => {
       try {
@@ -71,7 +68,6 @@ export default function ArtistsClient() {
         timeRange={selectedTimeRange}
         setTimeRange={setSelectedTimeRange}
         selected="artists"
-        artistUris={getArtistUris(artists[selectedTimeRange])}
       />
 
       <Top50Grid>

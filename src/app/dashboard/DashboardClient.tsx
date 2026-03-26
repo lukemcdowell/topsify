@@ -20,9 +20,13 @@ const emptyRecord = <T,>(): Record<TimeRangeType, T[]> => ({
 });
 
 export default function DashboardClient() {
-  const [tracks, setTracks] = useState<Record<TimeRangeType, TopTrackType[]>>(emptyRecord());
-  const [artists, setArtists] = useState<Record<TimeRangeType, TopArtistType[]>>(emptyRecord());
-  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(new Set());
+  const [tracks, setTracks] =
+    useState<Record<TimeRangeType, TopTrackType[]>>(emptyRecord());
+  const [artists, setArtists] =
+    useState<Record<TimeRangeType, TopArtistType[]>>(emptyRecord());
+  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(
+    new Set(),
+  );
   const [timeRange, setTimeRange] = useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
 
