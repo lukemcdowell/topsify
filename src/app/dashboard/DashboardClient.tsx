@@ -11,43 +11,52 @@ import { TimeRangeType, TopArtistType, TopTrackType } from "@/lib/types";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const TIME_RANGES: TimeRangeType[] = ["long_term", "medium_term", "short_term"];
+
+const emptyRecord = <T,>(): Record<TimeRangeType, T[]> => ({
+  long_term: [],
+  medium_term: [],
+  short_term: [],
+});
+
 export default function DashboardClient() {
-  const [topTracks, setTopTracks] = useState<TopTrackType[]>([]);
-  const [topArtists, setTopArtists] = useState<TopArtistType[]>([]);
+  const [tracks, setTracks] = useState<Record<TimeRangeType, TopTrackType[]>>(emptyRecord());
+  const [artists, setArtists] = useState<Record<TimeRangeType, TopArtistType[]>>(emptyRecord());
+  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(new Set());
   const [timeRange, setTimeRange] = useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTopData = async () => {
-      setLoading(true);
+    const fetchRange = async (range: TimeRangeType) => {
       try {
         const [tracksResponse, artistsResponse] = await Promise.all([
-          fetch(`/api/top?type=tracks&limit=5&timeRange=${timeRange}`),
-          fetch(`/api/top?type=artists&limit=5&timeRange=${timeRange}`),
+          fetch(`/api/top?type=tracks&limit=5&timeRange=${range}`),
+          fetch(`/api/top?type=artists&limit=5&timeRange=${range}`),
         ]);
+
+        if (!tracksResponse.ok || !artistsResponse.ok) {
+          setError(true);
+          return;
+        }
 
         const [tracksData, artistsData] = await Promise.all([
           tracksResponse.json(),
           artistsResponse.json(),
         ]);
 
-        if (tracksResponse.ok && artistsResponse.ok) {
-          setTopTracks(tracksData);
-          setTopArtists(artistsData);
-        } else {
-          setError(true);
-        }
-      } catch (error) {
+        setTracks((prev) => ({ ...prev, [range]: tracksData }));
+        setArtists((prev) => ({ ...prev, [range]: artistsData }));
+        setLoadedRanges((prev) => new Set(prev).add(range));
+      } catch (err) {
         setError(true);
-        console.error(error);
+        console.error(err);
       }
-
-      setLoading(false);
     };
 
-    fetchTopData();
-  }, [timeRange]);
+    TIME_RANGES.forEach((r) => fetchRange(r));
+  }, []);
+
+  const isLoaded = loadedRanges.has(timeRange);
 
   if (error)
     return (
@@ -63,16 +72,17 @@ export default function DashboardClient() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="container w-full flex justify-end pt-4 sm:pt-2 pb-2 px-2 sm:px-0">
+      <div className="container w-full lg:w-2/3 flex justify-end pt-4 sm:pt-2 pb-2 px-2 sm:px-0">
         <GlobalControls timeRange={timeRange} setTimeRange={setTimeRange} />
       </div>
-      <div className="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 pb-5 px-2 sm:px-0">
+      {/* TODO: what width should these be? how to display header? */}
+      <div className="w-full lg:w-2/3 grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 pb-5 px-2 sm:px-0">
         <Top5Card itemType="tracks">
-          {loading
+          {!isLoaded
             ? Array.from({ length: 5 }).map((_, index) => (
                 <TopTrackSkeleton key={index} />
               ))
-            : topTracks.map((trackData, index) => (
+            : tracks[timeRange].map((trackData, index) => (
                 <TopTrack
                   key={trackData.uri}
                   index={index}
@@ -81,11 +91,11 @@ export default function DashboardClient() {
               ))}
         </Top5Card>
         <Top5Card itemType="artists">
-          {loading
+          {!isLoaded
             ? Array.from({ length: 5 }).map((_, index) => (
                 <TopArtistSkeleton key={index} />
               ))
-            : topArtists.map((artistData, index) => (
+            : artists[timeRange].map((artistData, index) => (
                 <TopArtist
                   key={artistData.uri}
                   index={index}

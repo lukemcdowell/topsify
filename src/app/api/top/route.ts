@@ -36,7 +36,9 @@ export async function GET(request: NextRequest) {
   if (process.env.MOCK && process.env.MOCK === "true") {
     console.log("Environment variable MOCK set to true: using mock data");
     const mockData = await loadMockData(type);
-    return NextResponse.json(mockData.slice(0, Number(limit)));
+    return NextResponse.json(mockData.slice(0, Number(limit)), {
+      headers: { "Cache-Control": "private, max-age=300" },
+    });
   }
 
   if (!accessToken) {
@@ -61,7 +63,9 @@ export async function GET(request: NextRequest) {
       items = await getTopArtists(timeRange, Number(limit), accessToken);
     }
 
-    return NextResponse.json(items);
+    return NextResponse.json(items, {
+      headers: { "Cache-Control": "private, max-age=300" },
+    });
   } catch (error) {
     console.error("Error getting top items:", error);
     return new NextResponse("Error getting top items", { status: 500 });

@@ -41,7 +41,7 @@ export default function GlobalControls({
   return (
     <>
       <div className="flex gap-2 justify-center items-center w-full sm:w-auto px-2 sm:px-0">
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
               {timeRangeMapping[timeRange]}

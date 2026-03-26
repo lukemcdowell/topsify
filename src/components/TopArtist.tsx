@@ -1,3 +1,4 @@
+import { blurPlaceholder } from "@/lib/utils";
 import { TopArtistType } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,7 +42,7 @@ function TopArtist({ index, artistData }: TopArtistProps) {
                 width={artistData.images[0]?.width}
                 height={artistData.images[0]?.height}
                 placeholder="blur"
-                blurDataURL={artistData.images[2]?.url}
+                blurDataURL={blurPlaceholder()}
               />
               <div className="min-w-0 flex-1 text-start">
                 <p className="text-md font-medium leading-none text-white truncate">
@@ -73,7 +74,7 @@ function TopArtist({ index, artistData }: TopArtistProps) {
                 width={artistData.images[0]?.width}
                 height={artistData.images[0]?.height}
                 placeholder="blur"
-                blurDataURL={artistData.images[2]?.url}
+                blurDataURL={blurPlaceholder()}
               />
             </Link>
             <Link

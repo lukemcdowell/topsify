@@ -1,3 +1,4 @@
+import { blurPlaceholder } from "@/lib/utils";
 import { TopTrackType } from "@/lib/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -60,7 +61,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
                 width={trackData.album.images[0]?.width}
                 height={trackData.album.images[0]?.height}
                 placeholder="blur"
-                blurDataURL={trackData.album.images[2]?.url}
+                blurDataURL={blurPlaceholder()}
               />
               <div className="min-w-0 flex-1 text-start">
                 <p className="text-md font-medium leading-none text-white truncate">
@@ -98,7 +99,7 @@ function TopTrack({ index, trackData }: TopTrackProps) {
                 width={trackData.album.images[0]?.width}
                 height={trackData.album.images[0]?.height}
                 placeholder="blur"
-                blurDataURL={trackData.album.images[2]?.url}
+                blurDataURL={blurPlaceholder()}
               />
             </Link>
             <Link

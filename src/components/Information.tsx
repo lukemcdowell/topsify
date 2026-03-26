@@ -53,7 +53,7 @@ export default function Information({ isOpen, setIsOpen }: InformationProps) {
         <div className="text-center sm:text-right">
           Developed by{" "}
           <a
-            href="https://lukemcdowell.github.io/"
+            href="https://lukemcdowell.dev/"
             target="_blank"
             className="font-medium text-primary underline underline-offset-4"
           >
