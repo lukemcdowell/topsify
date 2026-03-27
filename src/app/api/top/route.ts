@@ -1,4 +1,5 @@
-import { COOKIE_NAMES } from "@/lib/cookies";
+import { isRateLimited } from "@/lib/rateLimit";
+import { getServerAccessToken } from "@/lib/serverToken";
 import { getTopArtists, getTopTracks } from "@/lib/spotifyApi";
 import { promises as fs } from "fs";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,7 +17,15 @@ async function loadMockData(type: string) {
 }
 
 export async function GET(request: NextRequest) {
-  const accessToken = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
+  const isMock = process.env.MOCK === "true";
+
+  if (!isMock) {
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+    if (isRateLimited(ip)) {
+      return new NextResponse("Too many requests", { status: 429 });
+    }
+  }
+
   const type = request.nextUrl.searchParams.get("type");
   const limit = request.nextUrl.searchParams.get("limit");
   const timeRange = request.nextUrl.searchParams.get("timeRange");
@@ -33,16 +42,12 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  if (process.env.MOCK && process.env.MOCK === "true") {
+  if (isMock) {
     console.log("Environment variable MOCK set to true: using mock data");
     const mockData = await loadMockData(type);
     return NextResponse.json(mockData.slice(0, Number(limit)), {
       headers: { "Cache-Control": "private, max-age=300" },
     });
-  }
-
-  if (!accessToken) {
-    return NextResponse.redirect(new URL("/api/login", request.url));
   }
 
   if (
@@ -56,6 +61,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const accessToken = await getServerAccessToken();
     let items;
     if (type === "tracks") {
       items = await getTopTracks(timeRange, Number(limit), accessToken);

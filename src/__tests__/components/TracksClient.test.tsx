@@ -25,7 +25,6 @@ vi.mock("@/components/PageHeader", () => ({
     timeRange: string;
     setTimeRange: (r: string) => void;
     selected: string;
-    trackUris?: string[];
   }) => (
     <div>
       <button onClick={() => setTimeRange("short_term")}>Short-term</button>

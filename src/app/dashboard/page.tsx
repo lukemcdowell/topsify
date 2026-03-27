@@ -1,7 +1,5 @@
-import { getValidAccessToken } from "@/lib/auth";
 import DashboardClient from "./DashboardClient";
 
-export default async function DashboardPage() {
-  await getValidAccessToken();
+export default function DashboardPage() {
   return <DashboardClient />;
 }

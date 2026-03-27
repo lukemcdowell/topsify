@@ -30,7 +30,7 @@ export function createAuthURL(): string[] {
     redirect_uri: REDIRECT_URI,
     response_type: "code",
     state,
-    scope: "user-top-read playlist-modify-public playlist-modify-private",
+    scope: "user-top-read",
   });
 
   return [`https://accounts.spotify.com/authorize?${params.toString()}`, state];
@@ -163,86 +163,3 @@ export async function getTopArtists(
   return fetchTopItems<TopArtistType>("artists", timeRange, limit, accessToken);
 }
 
-const timeRangeDescriptions: Record<string, string> = {
-  short_term: "My top songs in the last 4 weeks",
-  medium_term: "My top songs in the last 6 months",
-  long_term: "My top songs of all time",
-};
-
-// create a new playlist on the user's account
-export async function createPlaylist(
-  playlistName: string,
-  publicPlaylist: boolean,
-  accessToken: string,
-  timeRange?: string,
-): Promise<string> {
-  const url = `https://api.spotify.com/v1/me/playlists`;
-  const timeRangeDescription = timeRange
-    ? timeRangeDescriptions[timeRange]
-    : null;
-  const description = timeRangeDescription
-    ? `${timeRangeDescription}. Created with topSify: https://topsify.vercel.app`
-    : "Created with topSify: https://topsify.vercel.app";
-  const body = JSON.stringify({
-    name: playlistName,
-    public: publicPlaylist,
-    description,
-  });
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    "Content-Type": "application/json",
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers,
-      body,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error creating playlist: ${response.statusText}`);
-    }
-
-    const newPlaylistDetails = await response.json();
-    return newPlaylistDetails.id;
-  } catch (error) {
-    console.error("Error creating playlist:", error);
-    throw error;
-  }
-}
-
-// add tracks to a playlist
-export async function addTracksToPlaylist(
-  playlistId: string,
-  trackUris: string[],
-  accessToken: string,
-): Promise<void> {
-  const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
-  const body = JSON.stringify({
-    uris: trackUris,
-  });
-
-  const headers = {
-    Authorization: `Bearer ${accessToken}`,
-    "Content-Type": "application/json",
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers,
-      body,
-    });
-
-    if (!response.ok) {
-      throw new Error(
-        `Error adding tracks to playlist: ${response.statusText}`,
-      );
-    }
-  } catch (error) {
-    console.error("Error adding tracks to playlist:", error);
-    throw error;
-  }
-}

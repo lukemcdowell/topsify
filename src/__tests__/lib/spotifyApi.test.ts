@@ -1,7 +1,5 @@
 import {
-  addTracksToPlaylist,
   createAuthURL,
-  createPlaylist,
   getTopArtists,
   getTopTracks,
   requestAccessToken,
@@ -47,7 +45,6 @@ describe("createAuthURL", () => {
   it("includes the required scopes", () => {
     const [url] = createAuthURL();
     expect(url).toContain("user-top-read");
-    expect(url).toContain("playlist-modify-public");
   });
 });
 
@@ -183,43 +180,3 @@ describe("getTopArtists", () => {
   });
 });
 
-describe("createPlaylist", () => {
-  it("returns the new playlist ID", async () => {
-    mockFetch.mockResolvedValue(makeFetchResponse({ id: "playlist123" }));
-
-    const id = await createPlaylist("My Playlist", true, "token");
-    expect(id).toBe("playlist123");
-  });
-
-  it("includes time range description in playlist when timeRange provided", async () => {
-    mockFetch.mockResolvedValue(makeFetchResponse({ id: "p1" }));
-    await createPlaylist("My Playlist", false, "token", "long_term");
-
-    const [, options] = mockFetch.mock.calls[0];
-    const body = JSON.parse(options.body);
-    expect(body.description).toContain("all time");
-  });
-
-  it("throws on non-ok response", async () => {
-    mockFetch.mockResolvedValue(makeFetchResponse(null, false, 403));
-    await expect(createPlaylist("Name", true, "token")).rejects.toThrow();
-  });
-});
-
-describe("addTracksToPlaylist", () => {
-  it("posts URIs to the playlist endpoint", async () => {
-    mockFetch.mockResolvedValue(makeFetchResponse({ snapshot_id: "snap" }));
-
-    await addTracksToPlaylist("playlist1", ["uri1", "uri2"], "token");
-    const [url, options] = mockFetch.mock.calls[0];
-    expect(url).toContain("/playlists/playlist1/tracks");
-    expect(JSON.parse(options.body).uris).toEqual(["uri1", "uri2"]);
-  });
-
-  it("throws on non-ok response", async () => {
-    mockFetch.mockResolvedValue(makeFetchResponse(null, false, 403));
-    await expect(
-      addTracksToPlaylist("p1", ["uri"], "token"),
-    ).rejects.toThrow();
-  });
-});

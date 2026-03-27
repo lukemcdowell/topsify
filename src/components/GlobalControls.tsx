@@ -7,14 +7,8 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { TimeRangeType } from "@/lib/types";
-import { ChevronDown, Info, ListPlus, LogOut } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 import { useState } from "react";
 import Information from "./Information";
 import { Button } from "./ui/button";
@@ -22,7 +16,6 @@ import { Button } from "./ui/button";
 interface GlobalControlsProps {
   timeRange: TimeRangeType;
   setTimeRange: (range: TimeRangeType) => void;
-  onCreatePlaylist?: () => void;
 }
 
 const timeRangeMapping: Record<TimeRangeType, string> = {
@@ -34,19 +27,12 @@ const timeRangeMapping: Record<TimeRangeType, string> = {
 export default function GlobalControls({
   timeRange,
   setTimeRange,
-  onCreatePlaylist,
 }: GlobalControlsProps) {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   return (
     <>
       <div className="flex gap-2 justify-center items-center w-full sm:w-auto px-2 sm:px-0">
-        {onCreatePlaylist && (
-          <Button onClick={onCreatePlaylist} aria-label="Create playlist">
-            <span className="hidden sm:inline">Create playlist</span>
-            <ListPlus />
-          </Button>
-        )}
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
@@ -72,33 +58,13 @@ export default function GlobalControls({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                onClick={() => setIsInfoOpen(true)}
-                aria-label="About & how to use"
-              >
-                <Info />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>About & How to Use</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <TooltipProvider delayDuration={0}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" aria-label="Log out" asChild>
-                <a href="/api/logout">
-                  <LogOut />
-                </a>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Log out</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Button
+          onClick={() => setIsInfoOpen(true)}
+          aria-label="About & how to use"
+        >
+          <Info />
+          About
+        </Button>
       </div>
 
       <Information isOpen={isInfoOpen} setIsOpen={setIsInfoOpen} />

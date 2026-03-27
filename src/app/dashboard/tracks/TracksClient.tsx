@@ -24,9 +24,6 @@ export default function TracksClient() {
     useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
 
-  const getTrackUris = (trackList: TopTrackType[]) =>
-    trackList.map((t) => t.uri);
-
   useEffect(() => {
     const fetchRange = async (timeRange: TimeRangeType) => {
       try {
@@ -69,7 +66,6 @@ export default function TracksClient() {
         timeRange={selectedTimeRange}
         setTimeRange={setSelectedTimeRange}
         selected="tracks"
-        trackUris={getTrackUris(tracks[selectedTimeRange])}
       />
 
       <Top50Grid>

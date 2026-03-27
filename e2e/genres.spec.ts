@@ -29,7 +29,7 @@ test.describe("Genres page", () => {
   test("switching time range updates the view", async ({ page }) => {
     await page.goto("/dashboard/genres");
 
-    await expect(page.locator("svg").first()).toBeVisible({ timeout: 10000 });
+    await page.waitForLoadState("networkidle");
 
     await page.getByRole("button", { name: /long-term/i }).click();
     await page.getByRole("menuitemradio", { name: /medium-term/i }).click();
@@ -44,19 +44,6 @@ test.describe("Genres page", () => {
 
     const genresLink = page.getByRole("link", { name: /genres/i }).first();
     await expect(genresLink).toHaveClass(/border-primary/);
-  });
-
-  test("unauthenticated user is redirected away from /dashboard/genres", async ({
-    browser,
-  }) => {
-    // Fresh context with no cookies
-    const context = await browser.newContext();
-    const page = await context.newPage();
-
-    await page.goto("/dashboard/genres");
-    await expect(page).not.toHaveURL("/dashboard/genres");
-
-    await context.close();
   });
 });
 
@@ -98,6 +85,7 @@ test.describe("Navigation — genres", () => {
     page,
   }) => {
     await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
 
     const links = page.getByRole("link", { name: /view all/i });
     await links.nth(2).click();
@@ -114,6 +102,7 @@ test.describe("Navigation — genres", () => {
 
   test("clicking genres nav tab navigates to genres page", async ({ page }) => {
     await page.goto("/dashboard/tracks");
+    await page.waitForLoadState("networkidle");
 
     await page.getByRole("link", { name: /genres/i }).click();
     await expect(page).toHaveURL("/dashboard/genres");

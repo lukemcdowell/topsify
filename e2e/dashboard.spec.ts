@@ -32,18 +32,10 @@ test.describe("Dashboard", () => {
     await expect(links.nth(1)).toHaveAttribute("href", "/dashboard/artists");
   });
 
-  test("displays 5 track items after loading", async ({ page }) => {
+  test("displays track items after loading", async ({ page }) => {
     await page.goto("/dashboard");
 
-    // Wait for skeletons to disappear and real items to appear
-    await page.waitForFunction(() => {
-      const skeletons = document.querySelectorAll(
-        "[data-testid='track-skeleton'], .animate-pulse",
-      );
-      return skeletons.length === 0 || document.querySelectorAll("img[alt]").length > 0;
-    }, { timeout: 10000 });
-
-    // Verify at least some content loaded (mock data returns items)
-    await expect(page.locator("img").first()).toBeVisible({ timeout: 10000 });
+    await page.waitForLoadState("networkidle");
+    await expect(page.getByText("Walk This Land")).toBeVisible();
   });
 });
