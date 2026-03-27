@@ -1,4 +1,4 @@
-# Topsify
+# topSify
 
 View your top Spotify tracks and artists across different time ranges, and create playlists from them.
 

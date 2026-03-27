@@ -6,11 +6,11 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { CircleUserRound, Disc3 } from "lucide-react";
+import { CircleUserRound, Disc3, ChartBar } from "lucide-react";
 import Link from "next/link";
 
 interface NavigationProps {
-  selected: "tracks" | "artists";
+  selected: "tracks" | "artists" | "genres";
 }
 
 function Navigation({ selected }: NavigationProps) {
@@ -43,6 +43,20 @@ function Navigation({ selected }: NavigationProps) {
               <Link href="/dashboard/artists">
                 <CircleUserRound className="pr-1" />
                 Artists
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              asChild
+              className={cn(
+                navigationMenuTriggerStyle(),
+                selected === "genres" && "border border-primary",
+              )}
+            >
+              <Link href="/dashboard/genres">
+                <ChartBar className="pr-1" />
+                Genres
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>

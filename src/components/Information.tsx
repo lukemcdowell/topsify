@@ -22,7 +22,7 @@ export default function Information({ isOpen, setIsOpen }: InformationProps) {
           </DialogTitle>
 
           <DialogDescription className="text-left">
-            Topsify displays your top tracks and artists based on your Spotify
+            topSify displays your top tracks and artists based on your Spotify
             listening history.
           </DialogDescription>
         </DialogHeader>

@@ -4,8 +4,10 @@ import GlobalControls from "@/components/GlobalControls";
 import Top5Card from "@/components/Top5Card";
 import TopArtist from "@/components/TopArtist";
 import TopArtistSkeleton from "@/components/TopArtistSkeleton";
+import TopGenresChart from "@/components/TopGenresChart";
 import TopTrack from "@/components/TopTrack";
 import TopTrackSkeleton from "@/components/TopTrackSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { TimeRangeType, TopArtistType, TopTrackType } from "@/lib/types";
 import { AlertCircle } from "lucide-react";
@@ -35,7 +37,7 @@ export default function DashboardClient() {
       try {
         const [tracksResponse, artistsResponse] = await Promise.all([
           fetch(`/api/top?type=tracks&limit=5&timeRange=${range}`),
-          fetch(`/api/top?type=artists&limit=5&timeRange=${range}`),
+          fetch(`/api/top?type=artists&limit=50&timeRange=${range}`),
         ]);
 
         if (!tracksResponse.ok || !artistsResponse.ok) {
@@ -99,13 +101,22 @@ export default function DashboardClient() {
             ? Array.from({ length: 5 }).map((_, index) => (
                 <TopArtistSkeleton key={index} />
               ))
-            : artists[timeRange].map((artistData, index) => (
+            : artists[timeRange].slice(0, 5).map((artistData, index) => (
                 <TopArtist
                   key={artistData.uri}
                   index={index}
                   artistData={artistData}
                 />
               ))}
+        </Top5Card>
+      </div>
+      <div className="w-full lg:w-2/3 pb-8 px-2 sm:px-0">
+        <Top5Card itemType="genres">
+          {!isLoaded ? (
+            <Skeleton className="h-[300px] w-full" />
+          ) : (
+            <TopGenresChart artists={artists[timeRange]} />
+          )}
         </Top5Card>
       </div>
     </div>

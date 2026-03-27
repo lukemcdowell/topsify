@@ -10,21 +10,24 @@ import {
 } from "./ui/card";
 
 interface Top5CardProps {
-  itemType: "tracks" | "artists";
+  itemType: "tracks" | "artists" | "genres";
   children: React.ReactNode;
+  hideViewAll?: boolean;
 }
 
-function Top5Card({ itemType, children }: Top5CardProps) {
+function Top5Card({ itemType, children, hideViewAll }: Top5CardProps) {
   const itemTypeMapping = {
     tracks: {
       title: "Tracks",
       description: "Your top 5 tracks",
-      buttonText: "View all tracks",
     },
     artists: {
       title: "Artists",
       description: "Your top 5 artists",
-      buttonText: "View all artists",
+    },
+    genres: {
+      title: "Genres",
+      description: "Your top 5 genres",
     },
   };
   const cardText = itemTypeMapping[itemType];
@@ -37,11 +40,13 @@ function Top5Card({ itemType, children }: Top5CardProps) {
             <CardTitle>{cardText.title}</CardTitle>
             <CardDescription>{cardText.description}</CardDescription>
           </div>
-          <Button asChild>
-            <Link href={`/dashboard/${itemType}`}>
-              View all <ChevronRight />
-            </Link>
-          </Button>
+          {!hideViewAll && (
+            <Button asChild>
+              <Link href={`/dashboard/${itemType}`}>
+                View all <ChevronRight />
+              </Link>
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">{children}</CardContent>

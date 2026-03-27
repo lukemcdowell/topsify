@@ -11,7 +11,7 @@ export default function Home() {
         </h1>
 
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Discover your top tracks and artists from Spotify.
+          Discover your top tracks, artists, and genres from Spotify.
         </p>
 
         <Button asChild size="lg" className="mt-2 w-full sm:w-auto px-10">

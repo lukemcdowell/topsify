@@ -181,8 +181,8 @@ export async function createPlaylist(
     ? timeRangeDescriptions[timeRange]
     : null;
   const description = timeRangeDescription
-    ? `${timeRangeDescription}. Created with Topsify: https://topsify.vercel.app`
-    : "Created with Topsify: https://topsify.vercel.app";
+    ? `${timeRangeDescription}. Created with topSify: https://topsify.vercel.app`
+    : "Created with topSify: https://topsify.vercel.app";
   const body = JSON.stringify({
     name: playlistName,
     public: publicPlaylist,

@@ -9,7 +9,7 @@ import Navigation from "./Navigation";
 interface PageHeaderProps {
   timeRange: TimeRangeType;
   setTimeRange: (newTimeRange: TimeRangeType) => void;
-  selected: "tracks" | "artists";
+  selected: "tracks" | "artists" | "genres";
   trackUris?: string[];
 }
 
