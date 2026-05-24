@@ -1,17 +1,18 @@
 # topSify
 
-View your top Spotify tracks and artists across different time ranges, and create playlists from them.
+A read-only showcase of my top Spotify tracks, artists, and genres across different time ranges.
+
+> **Note:** This was originally built to let anyone view their own top Spotify data. Spotify restricted API access to approved apps after it was built, so it now only displays my listening history. You can still run your own instance - see below.
 
 ## Features
 
-- Top 5 tracks and artists overview on the dashboard
+- Top 5 tracks, artists, and genres overview on the dashboard
 - Full top 50 tracks and artists with short / medium / long-term time ranges
-- Create a Spotify playlist directly from any top-50 list
-- Spotify OAuth 2.0 authentication with token refresh
+- Top 20 genres as a bar chart, derived from top 50 artists
 
-## Running locally
+## Running your own instance
 
-**Prerequisites:** Node.js, a [Spotify Developer app](https://developer.spotify.com/dashboard) with `http://127.0.0.1:3000/api/callback` added as a redirect URI.
+**Prerequisites:** Node.js, a [Spotify Developer app](https://developer.spotify.com/dashboard), and a Spotify refresh token for your account (obtained via a [one-time OAuth flow](https://developer.spotify.com/documentation/web-api/tutorials/code-flow)).
 
 1. Clone the repo and install dependencies:
 
@@ -24,10 +25,10 @@ View your top Spotify tracks and artists across different time ranges, and creat
    ```
    SPOTIFY_CLIENT_ID=your_client_id
    SPOTIFY_CLIENT_SECRET=your_client_secret
-   SPOTIFY_REDIRECT_URI=http://127.0.0.1:3000/api/callback
+   SPOTIFY_REFRESH_TOKEN=your_refresh_token
    ```
 
-   > Tip: set `MOCK=true` to use mock data without a real Spotify connection.
+   > Tip: set `MOCK=true` to use mock data without a Spotify connection.
 
 3. Start the dev server:
 
@@ -35,7 +36,7 @@ View your top Spotify tracks and artists across different time ranges, and creat
    npm run dev
    ```
 
-4. Open [http://127.0.0.1:3000](http://127.0.0.1:3000) — use `127.0.0.1`, not `localhost` (required for the Spotify OAuth redirect to work).
+4. Open [http://localhost:3000](http://localhost:3000).
 
 ## Running tests
 
@@ -48,7 +49,7 @@ npm run test        # run once
 npm run test:watch  # watch mode
 ```
 
-Covers: lib utilities, Spotify API wrapper, auth logic, middleware, all API route handlers, and all client components.
+Covers: lib utilities, Spotify API wrapper, all API route handlers, and all client components.
 
 ### E2E tests
 
@@ -64,26 +65,25 @@ Then run:
 npm run test:e2e
 ```
 
-The E2E suite starts the dev server with `MOCK=true` automatically, so no `.env.local` or Spotify credentials are needed. Auth is simulated by injecting cookies directly — no real OAuth flow.
+The E2E suite starts the dev server with `MOCK=true` automatically, so no `.env.local` or Spotify credentials are needed.
 
 ## Stack
 
-- **Next.js 16** (App Router) — server components for auth guards, client components for data fetching and interactivity
+- **Next.js 16** (App Router) — server components, client components for data fetching and interactivity
 - **TypeScript**
 - **Tailwind CSS** + **shadcn/ui** (zinc, dark mode only)
-- **Spotify Web API** — top items, playlist creation
+- **Spotify Web API** — top items endpoint, server-side token refresh via `SPOTIFY_REFRESH_TOKEN`
 
 ## Project structure
 
 ```
 src/
   app/
-    api/              # Route handlers: login, callback, refresh, logout, top, createPlaylist
-    dashboard/        # Authenticated pages (overview, /tracks, /artists)
-    page.tsx          # Public login landing page
-  components/         # Shared UI components (PageHeader, Top5Card, Top50Grid, etc.)
-  lib/                # Auth helpers, Spotify API wrapper, types, cookies
-  mock/               # Mock data for local development (MOCK=true)
+    api/
+      top/          # Route handler: fetch top tracks or artists
+    dashboard/      # Pages: overview, /tracks, /artists, /genres
+    page.tsx        # Redirects to /dashboard
+  components/       # Shared UI components (PageHeader, Top5Card, Top50Grid, etc.)
+  lib/              # Spotify API wrapper, server token helper, types, utils
+  mock/             # Mock data for local development (MOCK=true)
 ```
-
-Auth is handled via httpOnly cookies (`access_token`, `refresh_token`). Middleware at `src/proxy.ts` handles redirects for unauthenticated and already-authenticated users.

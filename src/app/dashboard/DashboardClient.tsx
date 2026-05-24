@@ -10,7 +10,8 @@ import TopTrackSkeleton from "@/components/TopTrackSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { TimeRangeType, TopArtistType, TopTrackType } from "@/lib/types";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, TriangleAlert } from "lucide-react";
+
 import { useEffect, useState } from "react";
 
 const TIME_RANGES: TimeRangeType[] = ["long_term", "medium_term", "short_term"];
@@ -70,15 +71,19 @@ export default function DashboardClient() {
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          An error occurred while fetching your top tracks and artists. Please
-          try again later.
+          An error occurred while fetching top tracks and artists. Please try
+          again later.
         </AlertDescription>
       </Alert>
     );
 
   return (
     <div className="flex flex-col items-center">
-      <div className="container w-full lg:w-2/3 flex justify-end pt-4 sm:pt-2 pb-2 px-2 sm:px-0">
+      <div className="container w-full lg:w-2/3 flex justify-between items-center pt-4 sm:pt-2 pb-2 px-2 sm:px-0">
+        <span className="text-amber-400 text-xs flex items-center gap-1.5">
+          <TriangleAlert className="h-3 w-3 shrink-0" />
+          My data only - see info for details
+        </span>
         <GlobalControls timeRange={timeRange} setTimeRange={setTimeRange} />
       </div>
       {/* TODO: what width should these be? how to display header? */}
@@ -101,13 +106,15 @@ export default function DashboardClient() {
             ? Array.from({ length: 5 }).map((_, index) => (
                 <TopArtistSkeleton key={index} />
               ))
-            : artists[timeRange].slice(0, 5).map((artistData, index) => (
-                <TopArtist
-                  key={artistData.uri}
-                  index={index}
-                  artistData={artistData}
-                />
-              ))}
+            : artists[timeRange]
+                .slice(0, 5)
+                .map((artistData, index) => (
+                  <TopArtist
+                    key={artistData.uri}
+                    index={index}
+                    artistData={artistData}
+                  />
+                ))}
         </Top5Card>
       </div>
       <div className="w-full lg:w-2/3 pb-8 px-2 sm:px-0">

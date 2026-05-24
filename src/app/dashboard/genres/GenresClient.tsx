@@ -34,11 +34,14 @@ function getTopGenres(artists: TopArtistType[], topN = 20) {
 }
 
 export default function GenresClient() {
-  const [artists, setArtists] = useState<Record<TimeRangeType, TopArtistType[]>>(
-    { long_term: [], medium_term: [], short_term: [] },
+  const [artists, setArtists] = useState<
+    Record<TimeRangeType, TopArtistType[]>
+  >({ long_term: [], medium_term: [], short_term: [] });
+  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(
+    new Set(),
   );
-  const [loadedRanges, setLoadedRanges] = useState<Set<TimeRangeType>>(new Set());
-  const [selectedTimeRange, setSelectedTimeRange] = useState<TimeRangeType>("long_term");
+  const [selectedTimeRange, setSelectedTimeRange] =
+    useState<TimeRangeType>("long_term");
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -68,7 +71,7 @@ export default function GenresClient() {
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          An error occurred while fetching your top genres. Please try again later.
+          An error occurred while fetching top genres. Please try again later.
         </AlertDescription>
       </Alert>
     );
@@ -88,7 +91,10 @@ export default function GenresClient() {
         {!isLoaded ? (
           <Skeleton className="h-[560px] w-full rounded-lg" />
         ) : (
-          <ChartContainer config={chartConfig} className="h-[560px] w-full [&_.recharts-cartesian-axis-tick_text]:fill-white">
+          <ChartContainer
+            config={chartConfig}
+            className="h-[560px] w-full [&_.recharts-cartesian-axis-tick_text]:fill-white"
+          >
             <BarChart
               data={chartData}
               layout="vertical"
@@ -110,7 +116,11 @@ export default function GenresClient() {
                 cursor={{ fill: "hsl(var(--muted))" }}
                 content={<ChartTooltipContent nameKey="genre" hideLabel />}
               />
-              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]}>
+              <Bar
+                dataKey="count"
+                fill="hsl(var(--primary))"
+                radius={[0, 4, 4, 0]}
+              >
                 <LabelList
                   dataKey="count"
                   position="right"
