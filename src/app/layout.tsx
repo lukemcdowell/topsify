@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "topSify",
-  description: "Discover your top Spotify tracks, artists, and genres",
+  description: "Discover my top Spotify tracks, artists, and genres",
 };
 
 export default function RootLayout({

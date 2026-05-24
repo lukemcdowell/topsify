@@ -54,8 +54,7 @@ export default function ArtistsClient() {
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          An error occurred while fetching your top artists. Please try again
-          later.
+          An error occurred while fetching top artists. Please try again later.
         </AlertDescription>
       </Alert>
     );

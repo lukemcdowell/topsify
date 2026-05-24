@@ -37,8 +37,16 @@ export default function Information({ isOpen, setIsOpen }: InformationProps) {
             </AlertTitle>
             <AlertDescription>
               This project was originally intended to allow anyone to view their
-              top tracks, but Spotify changed their API access policies after I
-              built it, so it is now a showcase of my listening history only.
+              top tracks, but Spotify{" "}
+              <a
+                href="https://developer.spotify.com/documentation/web-api/concepts/quota-modes"
+                target="_blank"
+                className="underline underline-offset-4 text-amber-200"
+              >
+                changed their API access policies
+              </a>{" "}
+              after I built it, so it is now a showcase of my listening history
+              only.
               {/* You can read more about this in my{" "}
               <a
                 href=""

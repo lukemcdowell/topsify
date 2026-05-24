@@ -16,18 +16,21 @@ interface Top5CardProps {
 }
 
 function Top5Card({ itemType, children, hideViewAll }: Top5CardProps) {
-  const itemTypeMapping = {
+  const itemTypeMapping: Record<
+    "tracks" | "artists" | "genres",
+    { title: string; description: React.ReactNode }
+  > = {
     tracks: {
       title: "Tracks",
-      description: "Your top 5 tracks",
+      description: <><s>Your</s> My top 5 tracks</>,
     },
     artists: {
       title: "Artists",
-      description: "Your top 5 artists",
+      description: <><s>Your</s> My top 5 artists</>,
     },
     genres: {
       title: "Genres",
-      description: "Your top 5 genres",
+      description: <><s>Your</s> My top 5 genres</>,
     },
   };
   const cardText = itemTypeMapping[itemType];

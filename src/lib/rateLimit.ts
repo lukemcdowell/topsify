@@ -10,6 +10,11 @@ const windows = new Map<string, Window>();
 
 export function isRateLimited(ip: string): boolean {
   const now = Date.now();
+
+  for (const [key, w] of windows) {
+    if (now - w.start > WINDOW_MS) windows.delete(key);
+  }
+
   const window = windows.get(ip);
 
   if (!window || now - window.start > WINDOW_MS) {

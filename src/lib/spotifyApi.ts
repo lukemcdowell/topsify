@@ -8,73 +8,8 @@ import {
 } from "./types";
 import { getEnvVariable } from "./utils";
 
-const REDIRECT_URI = getEnvVariable("SPOTIFY_REDIRECT_URI");
 const CLIENT_ID = getEnvVariable("SPOTIFY_CLIENT_ID");
 const CLIENT_SECRET = getEnvVariable("SPOTIFY_CLIENT_SECRET");
-
-// helper function to prevent CSRF attacks
-function generateRandomString(length: number): string {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  return Array.from({ length })
-    .map(() => characters.charAt(Math.floor(Math.random() * characters.length)))
-    .join("");
-}
-
-// creates the URL for redirecting to Spotify's authorization page
-export function createAuthURL(): string[] {
-  const state = generateRandomString(16);
-
-  const params = new URLSearchParams({
-    client_id: CLIENT_ID,
-    redirect_uri: REDIRECT_URI,
-    response_type: "code",
-    state,
-    scope: "user-top-read",
-  });
-
-  return [`https://accounts.spotify.com/authorize?${params.toString()}`, state];
-}
-
-// requests the initial access and refresh tokens
-export async function requestAccessToken(code: string): Promise<string[]> {
-  const url = "https://accounts.spotify.com/api/token";
-  const body = new URLSearchParams({
-    grant_type: "authorization_code",
-    code,
-    redirect_uri: REDIRECT_URI,
-  });
-
-  const headers = {
-    Authorization:
-      "Basic " +
-      Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64"),
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers,
-      body,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error requesting access token: ${response.statusText}`);
-    }
-
-    const data: AccessTokenResponse = await response.json();
-
-    if (!data.refresh_token) {
-      throw new Error(`Error: refresh token is undefined`);
-    }
-
-    return [data.access_token, data.refresh_token];
-  } catch (error) {
-    console.error("Error requesting access token:", error);
-    throw error;
-  }
-}
 
 // uses the refresh token to request a new access token
 export async function requestRefreshedAccessToken(

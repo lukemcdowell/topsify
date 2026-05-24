@@ -52,8 +52,7 @@ export default function TracksClient() {
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          An error occurred while fetching your top tracks. Please try again
-          later.
+          An error occurred while fetching top tracks. Please try again later.
         </AlertDescription>
       </Alert>
     );

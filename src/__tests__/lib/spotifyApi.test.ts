@@ -1,8 +1,6 @@
 import {
-  createAuthURL,
   getTopArtists,
   getTopTracks,
-  requestAccessToken,
   requestRefreshedAccessToken,
 } from "@/lib/spotifyApi";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -32,72 +30,6 @@ function makeFetchResponse(
 
 beforeEach(() => {
   mockFetch.mockReset();
-});
-
-describe("createAuthURL", () => {
-  it("returns a Spotify authorize URL and a state string", () => {
-    const [url, state] = createAuthURL();
-    expect(url).toContain("https://accounts.spotify.com/authorize");
-    expect(url).toContain("response_type=code");
-    expect(state).toHaveLength(16);
-  });
-
-  it("includes the required scopes", () => {
-    const [url] = createAuthURL();
-    expect(url).toContain("user-top-read");
-  });
-});
-
-describe("requestAccessToken", () => {
-  it("returns [accessToken, refreshToken] on success", async () => {
-    mockFetch.mockResolvedValue(
-      makeFetchResponse({
-        access_token: "at123",
-        refresh_token: "rt456",
-        expires_in: 3600,
-        token_type: "Bearer",
-        scope: "",
-      }),
-    );
-
-    const result = await requestAccessToken("auth-code");
-    expect(result).toEqual(["at123", "rt456"]);
-  });
-
-  it("sends Basic auth header", async () => {
-    mockFetch.mockResolvedValue(
-      makeFetchResponse({
-        access_token: "at",
-        refresh_token: "rt",
-        expires_in: 3600,
-        token_type: "Bearer",
-        scope: "",
-      }),
-    );
-
-    await requestAccessToken("code");
-    const [, options] = mockFetch.mock.calls[0];
-    expect(options.headers.Authorization).toMatch(/^Basic /);
-  });
-
-  it("throws when response is not ok", async () => {
-    mockFetch.mockResolvedValue(makeFetchResponse(null, false, 400));
-    await expect(requestAccessToken("bad-code")).rejects.toThrow();
-  });
-
-  it("throws when refresh_token is missing from response", async () => {
-    mockFetch.mockResolvedValue(
-      makeFetchResponse({
-        access_token: "at",
-        expires_in: 3600,
-        token_type: "Bearer",
-        scope: "",
-      }),
-    );
-    await expect(requestAccessToken("code")).rejects.toThrow(
-      "refresh token is undefined",
-    );
-  });
 });
 
 describe("requestRefreshedAccessToken", () => {
