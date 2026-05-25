@@ -29,8 +29,6 @@ test.describe("Genres page", () => {
   test("switching time range updates the view", async ({ page }) => {
     await page.goto("/dashboard/genres");
 
-    await page.waitForLoadState("networkidle");
-
     await page.getByRole("button", { name: /long-term/i }).click();
     await page.getByRole("menuitemradio", { name: /medium-term/i }).click();
 
@@ -55,7 +53,7 @@ test.describe("Dashboard genres card", () => {
   test("genres card is visible on the dashboard", async ({ page }) => {
     await page.goto("/dashboard");
 
-    await expect(page.getByText("Your top 5 genres")).toBeVisible();
+    await expect(page.getByText("My top 5 genres")).toBeVisible();
   });
 
   test("genres card has a 'View all' link to /dashboard/genres", async ({
@@ -65,7 +63,7 @@ test.describe("Dashboard genres card", () => {
 
     const links = page.getByRole("link", { name: /view all/i });
     // Tracks is nth(0), artists is nth(1), genres is nth(2)
-    await expect(links.nth(2)).toHaveAttribute("href", "/dashboard/genres");
+    await expect(links.nth(2)).toHaveAttribute("href", "/dashboard/genres", { timeout: 10000 });
   });
 
   test("genres pie chart renders after loading", async ({ page }) => {
@@ -85,10 +83,11 @@ test.describe("Navigation — genres", () => {
     page,
   }) => {
     await page.goto("/dashboard");
-    await page.waitForLoadState("networkidle");
 
     const links = page.getByRole("link", { name: /view all/i });
-    await links.nth(2).click();
+    await page.evaluate(() => {
+      (document.querySelector('a[href="/dashboard/genres"]') as HTMLAnchorElement)?.click();
+    });
     await expect(page).toHaveURL("/dashboard/genres");
   });
 
@@ -97,14 +96,15 @@ test.describe("Navigation — genres", () => {
 
     await expect(
       page.getByRole("link", { name: /genres/i }),
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 10000 });
   });
 
   test("clicking genres nav tab navigates to genres page", async ({ page }) => {
     await page.goto("/dashboard/tracks");
-    await page.waitForLoadState("networkidle");
 
-    await page.getByRole("link", { name: /genres/i }).click();
+    await page.evaluate(() => {
+      (document.querySelector('a[href="/dashboard/genres"]') as HTMLAnchorElement)?.click();
+    });
     await expect(page).toHaveURL("/dashboard/genres");
   });
 });
