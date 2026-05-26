@@ -1,4 +1,4 @@
-import TracksClient from "@/app/dashboard/tracks/TracksClient";
+import TracksClient from "@/app/tracks/TracksClient";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";

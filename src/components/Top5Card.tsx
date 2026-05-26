@@ -45,7 +45,7 @@ function Top5Card({ itemType, children, hideViewAll }: Top5CardProps) {
           </div>
           {!hideViewAll && (
             <Button asChild>
-              <Link href={`/dashboard/${itemType}`}>
+              <Link href={`/${itemType}`}>
                 View all <ChevronRight />
               </Link>
             </Button>

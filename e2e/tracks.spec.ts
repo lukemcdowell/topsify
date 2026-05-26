@@ -6,13 +6,13 @@ test.describe("Tracks page", () => {
     await setAuthCookies(context);
   });
 
-  test("renders the tracks page at /dashboard/tracks", async ({ page }) => {
-    await page.goto("/dashboard/tracks");
-    await expect(page).toHaveURL("/dashboard/tracks");
+  test("renders the tracks page at /tracks", async ({ page }) => {
+    await page.goto("/tracks");
+    await expect(page).toHaveURL("/tracks");
   });
 
   test("shows track items or error after loading", async ({ page }) => {
-    await page.goto("/dashboard/tracks");
+    await page.goto("/tracks");
 
     await expect(
       page.locator("img").or(page.getByRole("alert")).first()
@@ -20,7 +20,7 @@ test.describe("Tracks page", () => {
   });
 
   test("time range buttons are visible", async ({ page }) => {
-    await page.goto("/dashboard/tracks");
+    await page.goto("/tracks");
 
     await expect(
       page.getByRole("button", { name: /long-term/i }),
@@ -28,7 +28,7 @@ test.describe("Tracks page", () => {
   });
 
   test("switching time range updates the selector label", async ({ page }) => {
-    await page.goto("/dashboard/tracks");
+    await page.goto("/tracks");
 
     await page.getByRole("button", { name: /long-term/i }).click();
     await page.getByRole("menuitemradio", { name: /short-term/i }).click();

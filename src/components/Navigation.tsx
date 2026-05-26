@@ -26,7 +26,7 @@ function Navigation({ selected }: NavigationProps) {
                 selected === "tracks" && "border border-primary",
               )}
             >
-              <Link href="/dashboard/tracks">
+              <Link href="/tracks">
                 <Disc3 className="pr-1" />
                 Tracks
               </Link>
@@ -40,7 +40,7 @@ function Navigation({ selected }: NavigationProps) {
                 selected === "artists" && "border border-primary",
               )}
             >
-              <Link href="/dashboard/artists">
+              <Link href="/artists">
                 <CircleUserRound className="pr-1" />
                 Artists
               </Link>
@@ -54,7 +54,7 @@ function Navigation({ selected }: NavigationProps) {
                 selected === "genres" && "border border-primary",
               )}
             >
-              <Link href="/dashboard/genres">
+              <Link href="/genres">
                 <ChartBar className="pr-1" />
                 Genres
               </Link>

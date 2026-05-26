@@ -6,19 +6,19 @@ test.describe("Artists page", () => {
     await setAuthCookies(context);
   });
 
-  test("renders the artists page at /dashboard/artists", async ({ page }) => {
-    await page.goto("/dashboard/artists");
-    await expect(page).toHaveURL("/dashboard/artists");
+  test("renders the artists page at /artists", async ({ page }) => {
+    await page.goto("/artists");
+    await expect(page).toHaveURL("/artists");
   });
 
   test("shows artist items after loading", async ({ page }) => {
-    await page.goto("/dashboard/artists");
+    await page.goto("/artists");
 
     await expect(page.locator("img").first()).toBeVisible({ timeout: 10000 });
   });
 
   test("time range buttons are visible", async ({ page }) => {
-    await page.goto("/dashboard/artists");
+    await page.goto("/artists");
 
     await expect(
       page.getByRole("button", { name: /long-term/i }),
@@ -26,7 +26,7 @@ test.describe("Artists page", () => {
   });
 
   test("switching time range updates the view", async ({ page }) => {
-    await page.goto("/dashboard/artists");
+    await page.goto("/artists");
 
     await expect(page.locator("img").first()).toBeVisible({ timeout: 10000 });
 
@@ -41,7 +41,7 @@ test.describe("Artists page", () => {
   test("does not show a create playlist button on artists page", async ({
     page,
   }) => {
-    await page.goto("/dashboard/artists");
+    await page.goto("/artists");
 
     // Wait for page to load, then confirm no create playlist button
     await expect(page.locator("img").first()).toBeVisible({ timeout: 10000 });
